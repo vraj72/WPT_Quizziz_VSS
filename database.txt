@@ -15,3 +15,7 @@ ADD PRIMARY KEY (Mobile_number);
 
 
 
+//create table student
+
+
+
