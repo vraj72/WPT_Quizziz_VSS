@@ -3,3 +3,28 @@ testing it
 
 adding line 
 VSS 
+
+
+
+
+
+
+
+Table Teacher {
+  
+        Serial_No int
+        Email char(50) [pk]
+        Name varchar(50) 
+        Password VARCHAR(50)
+        Mobile_number varchar(12)
+        x1 int
+        x2 int
+        x3 int
+        x4 varchar(20)
+        x5 varchar(20)
+        x6 varchar(20)
+        x7 char(20)
+        x8 char(20)
+        x9 float
+        x10 datetime
+}
