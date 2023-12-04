@@ -1,3 +1,7 @@
+
+CREATE DATABASE Quizizz;
+
+
 CREATE TABLE `Teacher` (
   `Teacher_ID` int PRIMARY KEY,
   `Email` char(50) UNIQUE NOT NULL,
