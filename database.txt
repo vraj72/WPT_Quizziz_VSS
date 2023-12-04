@@ -1,21 +1,43 @@
 create database Quizizz;
 
 
-create table Teacher
-     (
-       Serial_No int,
-       Name varchar(50),
+CREATE TABLE `quizizz`.`teacher` (
+  `Serial_No` INT NOT NULL AUTO_INCREMENT,
+  `Email` CHAR(50) NOT NULL,
+  `Name` VARCHAR(50) NULL,
+  `Password` VARCHAR(50) NULL,
+  `Mobile_number` VARCHAR(12) NULL,
+  `x1` INT NULL,
+  `x2` INT NULL,
+  `x3` INT NULL,
+  `x4` VARCHAR(20) NULL,
+  `x5` VARCHAR(20) NULL,
+  `x6` VARCHAR(20) NULL,
+  `x7` CHAR(20) NULL,
+  `x8` CHAR(20) NULL,
+  `x9` FLOAT NULL,
+  `x10` DATETIME(6) NULL,
+  PRIMARY KEY (`Serial_No`));
+
+
+
+
+CREATE TABLE student(
+	   First_Name varchar(50) NOT NULL,
+	   Last_Name varchar(50) NOT NULL,
+	   Student_Id int PRIMARY KEY AUTO_INCREMENT,
        Email char(50),
-       Password VARCHAR(50),
-       Mobile_number INT
-    ); 
-
-ALTER TABLE Teacher
-ADD PRIMARY KEY (Mobile_number);
-
-
-
-//create table student
+	   Gender char(10),
+	   Mobile_no varchar(15),
+       Password varchar(50),
+	   A1 int,
+	   A2 int,
+	   B1 varchar(20),
+	   B2 varchar(20),
+	   C1 char(20),
+	   C2 char(20),
+	   D1 datetime
+	   );
 
 
 
