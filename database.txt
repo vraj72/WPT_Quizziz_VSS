@@ -5,10 +5,13 @@ create table Teacher
      (
        Serial_No int,
        Name varchar(50),
-       Email varchar(50),
+       Email char(50),
        Password VARCHAR(50),
        Mobile_number INT
     ); 
 
 ALTER TABLE Teacher
 ADD PRIMARY KEY (Mobile_number);
+
+
+
