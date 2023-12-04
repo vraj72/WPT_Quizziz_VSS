@@ -15,7 +15,22 @@ ADD PRIMARY KEY (Mobile_number);
 
 
 
-//create table student
+CREATE TABLE student(
+	   First_Name varchar(50) NOT NULL,
+	   Last_Name varchar(50) NOT NULL,
+	   Student_Id int PRIMARY KEY AUTO_INCREMENT,
+       Email char(50),
+	   Gender char(10),
+	   Mobile_no int,
+       Password VARCHAR(50),
+	   A1 int,
+	   A2 int,
+	   B1 varchar(20),
+	   B2 varchar(20),
+	   C1 char(20),
+	   C2 char(20),
+	   D1 datetime
+	   );
 
 
 
