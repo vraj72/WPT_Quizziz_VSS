@@ -3,7 +3,7 @@ CREATE DATABASE Quizizz;
 
 
 CREATE TABLE `Teacher` (
-  `Teacher_ID` int PRIMARY KEY,
+  `Teacher_ID` int AUTO_INCREMENT PRIMARY KEY,
   `Email` char(50) UNIQUE NOT NULL,
   `Name` varchar(50) NOT NULL,
   `Password` VARCHAR(50) NOT NULL,
@@ -18,12 +18,12 @@ CREATE TABLE `Teacher` (
   `A8` char(20),
   `A9` float,
   `A10` datetime
-);
+) AUTO_INCREMENT = 1001;
 
 CREATE TABLE `Student` (
+  `Student_ID` int AUTO_INCREMENT PRIMARY KEY,
   `First_Name` varchar(50) NOT NULL,
   `Last_Name` varchar(50) NOT NULL,
-  `Student_ID` int PRIMARY KEY,
   `Email` char(50) UNIQUE NOT NULL,
   `Gender` char(10) NOT NULL,
   `Mobile_no` varchar(15) NOT NULL,
@@ -35,13 +35,13 @@ CREATE TABLE `Student` (
   `A5` char(20),
   `A6` char(20),
   `A7` datetime
-);
+)AUTO_INCREMENT = 2001 ;
 
 CREATE TABLE `course` (
-  `Course_ID` int PRIMARY KEY,
+  `Course_ID` int AUTO_INCREMENT PRIMARY KEY,
   `Course_name` varchar(50) NOT NULL,
   `Desc` varchar(1000),
-  `Teacher_ID` char(50) NOT NULL,
+  `Teacher_ID` int NOT NULL,
   `A1` int,
   `A2` int,
   `A3` int,
@@ -49,10 +49,10 @@ CREATE TABLE `course` (
   `A5` varchar(20),
   `A6` varchar(20),
   `A7` datetime
-);
+)AUTO_INCREMENT = 3001;
 
 CREATE TABLE `Enrollement` (
-  `Eid` int PRIMARY KEY,
+  `Eid` int AUTO_INCREMENT PRIMARY KEY,
   `Course_ID` int NOT NULL,
   `Student_ID` int NOT NULL,
   `status` int NOT NULL,
@@ -63,10 +63,10 @@ CREATE TABLE `Enrollement` (
   `A5` varchar(20),
   `A6` varchar(20),
   `A7` datetime
-);
+)AUTO_INCREMENT = 4001;
 
 CREATE TABLE `Quizz` (
-  `Quizz_ID` int PRIMARY KEY,
+  `Quizz_ID` int AUTO_INCREMENT PRIMARY KEY,
   `Course_ID` int NOT NULL,
   `title` varchar(50) NOT NULL,
   `desc` varchar(1000),
@@ -84,10 +84,10 @@ CREATE TABLE `Quizz` (
   `A5` varchar(20),
   `A6` varchar(20),
   `A7` datetime
-);
+)AUTO_INCREMENT = 5001;
 
 CREATE TABLE `QuizzAttempt` (
-  `AID` int PRIMARY KEY,
+  `AID` int AUTO_INCREMENT PRIMARY KEY,
   `Quizz_ID` int NOT NULL,
   `Student_ID` int NOT NULL,
   `marks` float,
@@ -100,7 +100,7 @@ CREATE TABLE `QuizzAttempt` (
   `A5` varchar(20),
   `A6` varchar(20),
   `A7` datetime
-);
+)AUTO_INCREMENT = 6001;
 
 CREATE UNIQUE INDEX `Enrollement_index_0` ON `Enrollement` (`Student_ID`, `Course_ID`);
 
