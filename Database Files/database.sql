@@ -1,7 +1,6 @@
 
 CREATE DATABASE Quizizz;
 
-
 CREATE TABLE `Teacher` (
   `Teacher_ID` int AUTO_INCREMENT PRIMARY KEY,
   `Email` char(50) UNIQUE NOT NULL,
