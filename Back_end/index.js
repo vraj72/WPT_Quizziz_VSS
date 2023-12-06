@@ -1,7 +1,6 @@
 import express from "express";
 import { PORT_NO } from "./constants.js";
 import {StatusCodes} from "http-status-codes";
-import path from "path";
 import router_teacher from "./APIs/Teacher.js";
 import router_student from "./APIs/Student.js";
 
@@ -9,15 +8,14 @@ const app = express();
 app.use(express.json());
 
 
-
 app.use('/teacher',router_teacher);
 app.use('/student',router_student);
+
 app.get("/",(request,response)=>{
     response.status(StatusCodes.OK).send({message:"Welcome to Quizizz"});
 });
 
 app.listen(PORT_NO,()=>{
-    
     console.log("Backend Server has started at port ",PORT_NO);
 })
 
