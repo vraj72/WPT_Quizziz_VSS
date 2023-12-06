@@ -1,0 +1,133 @@
+******************************************Insert into*************************************************
+
+INSERT INTO Teacher (Email, Name, Password, Mobile_number)
+
+values ( 'saisr.bluegreen@gmail.com', 'Saisamarth P', 'Sai@1234', '8484981843'),
+( 'anusayamanchal888@gmail.com', 'Anusaya M', 'Anusaya@1234', '9637433457'),
+( 'ashokpothulu61@gmail.com', 'Ashok P', 'Ashok@8484', '9422216330'),
+( 'anupamapothulu94@gmail.com', 'Anupama P', 'Anupama@1512', '7773924394'),
+( 'akhilapathakoti1310@gmail.com', 'Akhila P', 'Akhila@0215', '9011060041');
+
+
+=====================================================================================================
+
+INSERT INTO student (first_name, last_name, email, gender, mobile_no, password)
+
+values ('Kaiwalya', 'Bhusari', 'kaiwalyabhusari06@gmail.com', 'Male', '9657671207', 'kbp@061996'),
+('Saqlain', 'Tamboli', 'tmsaqlain@gmail.com', 'Male', '9823747606', 'saqlaint@2008'),
+('Dhawal', 'Tulle', 'DhawalTulle@gmail.com', 'Male', '7385826320', 'dhawal@2106'),
+('Raksha', 'Choube', 'RakshaChoube1997@gmail.com', 'Female', '8484981835', 'rakshaC@8484'),
+('Suraj', 'Nikam', 'SurajNikam21@gmail.com', 'Male', '8390600618', 'Suraj@1234');
+
+======================================================================================================
+
+3.write insert command for Course Table 10 course 1 teacher -> 2 course
+
+INSERT INTO `course` (`Course_name`, `Description`, `Teacher_ID`)
+VALUES ('Indian Economics', 'Explore your knowledge of the Indian Economy by solving questions and answers provided below', 1001),
+('Indian History', 'A history quiz tests knowledge of past events, figures, and civilizations. Questions span diverse eras, from ancient civilizations to modern times, covering wars, inventions, cultural movements, and influential personalities.', 1001),
+('Mathematics', 'A math quiz evaluates proficiency in mathematical concepts across various topics. Questions cover arithmetic, algebra, geometry, calculus, and more.', 1002),
+('Science', 'A science quiz examines knowledge across scientific disciplines like biology, chemistry, physics, and earth sciences. Questions cover diverse topics such as the scientific method, fundamental principles, specific scientific theories, famous experiments, discoveries, and their applications.', 1002),
+('Geography', 'A geography quiz tests knowledge about the Earth landscapes, environments, and the relationship between people and their surroundings.', 1003),
+('Literature', 'A literature quiz delves into the world of written works, authors, literary devices, and genres. Questions cover classic and contemporary literature, famous authors lives and works, character analysis, plot details, literary terms, and themes.', 1003),
+('Technology', 'A technology quiz assesses knowledge of technological advancements, innovations, and concepts across various fields.', 1004),
+('Sports', 'A sports quiz focuses on athletes, teams, events, and rules across diverse sporting disciplines. Questions cover famous athletes achievements, team histories, championship events, rules of various games, iconic moments, and statistics.', 1004),
+('Arts and Music', 'An arts and music quiz explores creativity, artistic movements, and musical genres. Questions cover famous artists, their works, art movements, composers, musical instruments, musical compositions, genres, and historical periods.', 1005),
+('General Knowledge', 'A general knowledge quiz covers a wide range of diverse topics, testing participants understanding and awareness of various subjects. Questions may include trivia about history, science, geography, current affairs, famous personalities, cultural references, and miscellaneous facts. ', 1005);
+
+
+=======================================================================================================
+
+4.write insert command for Enrollment Table
+5 students
+2 students > 5 course
+2 students > 3 course 
+1 student no course enrolled no entry in enrollement
+
+
+insert into `Enrollement` (`Course_ID`, `Student_ID`, `status`)
+
+values (3015,2001,0),
+(3014,2001,0),
+(3017,2001,0),
+(3010,2002,0),
+(3011,2002,0),
+(3013,2002,0),
+(3016,2002,0),
+(3009,2002,0),
+(3010,2003,0),
+(3011,2003,0),
+(3014,2003,0),
+(3015,2003,0),
+(3016,2003,0),
+(3010,2004,0),
+(3011,2004,0),
+(3009,2004,0);
+
+====================================================================================================
+
+5.write insert command for Quizz Table 1 course=5 quizz || 2 course =  2 quizz
+
+
+INSERT INTO `Quizz` (`Course_ID`, `title`, `desc`, `starttime`, `endtime`, `passing`, `total_marks`, `avg`, `attempts`)
+VALUES (3010, 'Mathematics-Quiz 1', 'First quiz for the course', '2023-12-10 09:00:00', '2023-12-10 10:00:00', 60.0, 100.0, 75.0, 50),
+(3010,'Mathematics-Quiz 2', 'Second quiz for the course', '2023-12-15 10:00:00', '2023-12-15 11:00:00', 65.0, 100.0, 80.0, 50),
+(3010,'Mathematics-Quiz 3', 'Third quiz for the course', '2023-12-20 11:00:00', '2023-12-20 12:00:00', 70.0, 100.0, 85.0, 50),
+(3010,'Mathematics-Quiz 4', 'Fourth quiz for the course', '2023-12-25 13:00:00', '2023-12-25 14:00:00', 75.0, 100.0, 90.0, 50),
+(3010,'Mathematics-Quiz 5', 'Fifth quiz for the course', '2023-12-30 15:00:00', '2023-12-30 16:00:00', 80.0, 100.0, 95.0, 50);
+(3011,'Science-Quiz 1', 'First quiz for the course', '2023-12-25 13:00:00', '2023-12-25 14:00:00', 75.0, 100.0, 90.0, 50),
+(3011,'Science-Quiz 2', 'Second quiz for the course', '2023-12-25 13:00:00', '2023-12-25 14:00:00', 75.0, 100.0, 90.0, 50),
+(3017,'General Knowledge-Quiz 1', 'First quiz for the course', '2023-12-25 13:00:00', '2023-12-25 14:00:00', 75.0, 100.0, 90.0, 50),
+(3017,'General Knowledge-Quiz 2', 'Second quiz for the course', '2023-12-25 13:00:00', '2023-12-25 14:00:00', 75.0, 100.0, 90.0, 50);
+=====================================================================================================
+
+6.write insert command for Quiz Attempt Table
+1 student 5 quizz
+1 student 2 quizz
+
+INSERT INTO `QuizzAttempt` (`Quizz_ID`, `Student_ID`, `marks`)
+VALUES (5001, 2001, 85.5),
+(5001, 2002, 78.0,),
+(5001, 2003, 92.5,),
+(5001, 2004, 70.0,),
+(5001, 2005, 88.0,);
+
+=====================================================================================================
+
+For Teacher APIS
+
+1. Fetch All Course
+select * from course where Teacher_Id=' ';
+
+2. Fetch all quizz on course
+select * from quizz where Course_id=' ';
+
+3. Fetch all attempts on quizz id]
+select attempts from quizz where quizz_id=' ';
+
+4. Select password where email (for login)
+select pswrd from teacher where email=' ';
+
+5. Insert Register Teacher (for register)
+INSERT INTO Teacher (Email, Name, Password, Mobile_number) values ()
+
+For Student APIS
+
+1. Login Student(select password)
+select password from student where email=' ';
+
+2. Register Student (insert command)
+INSERT INTO student (first_name, last_name, email, gender, mobile_no, password) values ()
+
+3. Fetch all courses.
+select * from course;
+
+4. Fetch all enrolled courses(from enrollment table where studentid)
+select * from enrollment table where studentid=' ';
+
+5. Fetch all quizz on course id
+select * from quizz where Course_id=' '; 
+
+
+
+
