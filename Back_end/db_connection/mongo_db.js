@@ -11,4 +11,4 @@ const connectMongoDB = async()=>{
 }
 
 
-connectMongoDB();
+export default connectMongoDB;

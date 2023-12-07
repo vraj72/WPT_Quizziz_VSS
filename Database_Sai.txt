@@ -128,6 +128,18 @@ select * from enrollment table where studentid=' ';
 5. Fetch all quizz on course id
 select * from quizz where Course_id=' '; 
 
+===============================================================================================
+
+// register
+// login
+// showCourses
+// enrollToCourse
+// showMyEnrolledCourses
+// listQuizzesOnCourse
+// attemptQuiz
+// submitQuizz
+// seeAttemptedQuizz
+
 
 
 

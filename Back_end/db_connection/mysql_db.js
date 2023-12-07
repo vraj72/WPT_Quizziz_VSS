@@ -1,11 +1,11 @@
 import mysql from "mysql"
 
-export const mysqlPoolConnections = mysql.createPool({
-    connectionLimit:5,
+ const mysqlConnection = mysql.createConnection({
     host : 'localhost',
     user : 'root',
     password : 'cdac',
     database: 'Quizizz'
 });
 
+export default mysqlConnection;
 
