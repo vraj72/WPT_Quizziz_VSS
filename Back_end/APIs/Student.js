@@ -61,7 +61,7 @@ router_student.post('/register', (request, response) => {
 });
 
 //////////////////////Get a list of students////////////////////////////
-router_student.get('/list', (request, response) => {
+router_student.get('/Studentlist', (request, response) => {
 
     mysqlConnection.query(`SELECT * FROM Student;`, (error, results, feilds) => {
         if (error) {
@@ -78,7 +78,7 @@ router_student.get('/list', (request, response) => {
 
 ////////////////////Get a list of courses////////////////////////////////////
 
-router_student.get('/clist', (request, response) => {
+router_student.get('/Courselist', (request, response) => {
 
     mysqlConnection.query(`SELECT * FROM course;`, (error, results, feilds) => {
         if (error) {
@@ -140,7 +140,7 @@ router_student.post('/enroll',(request,response) =>{
 // seeAttemptedQuizz (to do ) (A_ID -> mysql  `attempt_mongo_ID` mongodb-> QuizzAttempt )
 //////////////////////////// ShowMyEnrolledCourses ////////////////////////////////////////////////////
 
-router_student.get('/elist',(request,response)=>{
+router_student.get('/listofEnrolledCourses',(request,response)=>{
 
     const Student_ID = request.body.Student_ID;
 
@@ -159,7 +159,7 @@ mysqlConnection.query(`SELECT * from Course where Course_Id IN (Select Course_ID
 /////////////////////////////////////// Courses not enrolled //////////////////////////////////////////
 
 
-router_student.get('/unenrolledList',(request,response)=>{
+router_student.get('/UnenrolledList',(request,response)=>{
 
     const Student_ID = request.body.Student_ID;
 
@@ -178,7 +178,7 @@ router_student.get('/unenrolledList',(request,response)=>{
 //////////////////////////////////// List Quizzez On Course ///////////////////////////////////////////
 
 
-router_student.get('/qListOnCourse',(request,response)=>{
+router_student.get('/QuizzlistOnCourse',(request,response)=>{
 
         const Course_ID = request.body.Course_ID;
 
@@ -255,7 +255,6 @@ router_student.post('/submitQuizz', async(request, response)=>{
     const passing_percentage = request.body.passing_percentage;
     const total_marks = request.body.total_marks;
     const attempted_questions = request.body.questions;
-    const Student_ID = request.body.Student_ID;
     var marks = 0;
 
     try{
@@ -312,21 +311,7 @@ router_student.post('/submitQuizz', async(request, response)=>{
         
         console.log(quizattempt);
         const result_f = await quizattempt.save();
-        
-        
-        mysqlConnection.query(`INSERT INTO QuizzAttempt (Quizz_ID,Student_ID,marks,status,attempt_mongo_ID  ) 
-        values(${Quizz_ID}, ${Student_ID},${marks}, ${((marks>(total_marks*passing_percentage*0.01))?1:0)}, "${result_f._id}" )`,(error,mysql_result,fields)=>{
-                if(error){
-                    response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({message : "Error"})
-                    throw error;
-                }
-                else{
-
-                    response.status(StatusCodes.OK).send({message : "Quizz submitted" ,result_f, A_ID : mysql_result.insertId});
-
-                }
-        });
-
+        response.status(StatusCodes.OK).send({message : "Quizz submitted" ,result_f});
         
     }catch(error){
         console.log(error);
@@ -337,12 +322,46 @@ router_student.post('/submitQuizz', async(request, response)=>{
 
 //// seeAttemptedQuizz (A_ID -> mysql  `attempt_mongo_ID` mongodb-> QuizzAttempt ) /////
 
-router_student.post('/seeAQ',async(request,response)=>{
-    const result_f = await QuizzAttempt.save();
-    const attemptedID = result_f._id; // This line fetches the attempted quiz ID
+// router_student.post('/seeAQ',async(request,response)=>{
     
-    response.status(StatusCodes.OK).send({ message: "Quizz submitted", attemptedID });
     
+//     response.status(StatusCodes.OK).send({ message: "Quizz submitted", attemptedID });
+    
+// });
+
+
+/////////////  Quiz List on Course Attempted /////////////////////
+
+router_student.get('/ListOfQuizAttemptedByCourse',(request,response)=>{
+
+            const Course_ID = request.body.Course_ID;
+
+    mysqlConnection.query(`Select Quizz_ID from QuizzAttempt where Student_ID IN (select Student_ID from enrollement where Course_ID="${Course_ID}")`,(error,result,fields)=>{
+
+                if(error){
+                    response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({message: "Error"})
+                }
+                else{
+                    response.send({result : result})
+                }
+    });
+});
+
+////////////////////////////////////////////////
+
+router_student.get('/ListOfQuizUnAttemptedByCourse',(request,response)=>{
+
+    const Course_ID = request.body.Course_ID;
+
+mysqlConnection.query(`Select Quizz_ID from QuizzAttempt where Student_ID NOTIN (select Student_ID from enrollement where Course_ID="${Course_ID}")`,(error,result,fields)=>{
+
+        if(error){
+            response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({message: "Error"})
+        }
+        else{
+            response.send({result : result})
+        }
+});
 });
 
 
