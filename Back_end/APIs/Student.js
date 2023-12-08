@@ -131,9 +131,9 @@ router_student.post('/enroll',(request,response) =>{
 // enrollToCourse
 // showMyEnrolledCourses
 // listQuizzesOnCourse
-// attemptQuiz
-// submitQuizz
-// seeAttemptedQuizz
+// attemptQuiz (done)
+// submitQuizz (done)
+// seeAttemptedQuizz (to do ) (A_ID -> mysql  `attempt_mongo_ID` mongodb-> QuizzAttempt )
 
 
 /////////////////////////////attemptQuiz/////////////////////////////////
@@ -237,6 +237,8 @@ router_student.post('/submitQuizz', async(request, response)=>{
                         });
         
         console.log(quizattempt);
+        const result_f = await quizattempt.save();
+        response.status(StatusCodes.OK).send({message : "Quizz submitted" ,result_f});
         
     }catch(error){
         console.log(error);
