@@ -322,12 +322,37 @@ router_student.post('/submitQuizz', async(request, response)=>{
 
 //// seeAttemptedQuizz (A_ID -> mysql  `attempt_mongo_ID` mongodb-> QuizzAttempt ) /////
 
-// router_student.post('/seeAQ',async(request,response)=>{
-    
-    
-//     response.status(StatusCodes.OK).send({ message: "Quizz submitted", attemptedID });
-    
-// });
+router_student.post('/seeAttemptedQuiz',(request,response)=>{
+    const Quizz_ID = request.body.Quizz_ID;
+    const Student_ID = request.body.Student_ID;
+    mysqlConnection.query(`select * from QuizzAttempt where Quizz_ID = ${Quizz_ID} and Student_ID = ${Student_ID};`, 
+    (error, results, feilds) => {
+        if (error) {
+          console.log("Error /seeAttemptedQuiz ", error);
+          response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: "Internal Server Error" });
+          throw error;
+        } else {
+            if(results.length == 0) 
+                response.status(StatusCodes.OK).send({ results: "No Attempt yet!!" });
+            else{
+                const AID = results[0].attempt_mongo_ID;
+                console.log("AIAID : AID",AID);
+                getQuizzAttempt(AID,response)
+            }  
+        }
+      });
+
+});
+
+async function getQuizzAttempt(AID,response){
+    try{
+        const attempt = await QuizzAttempt.findOne({_id : AID});
+        response.status(StatusCodes.OK).send({AID : AID, result : attempt });
+    }catch(error){
+        console.log(error)
+        response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({message: "Internal Server Error"})
+    }
+}
 
 
 /////////////  Quiz List on Course Attempted /////////////////////
