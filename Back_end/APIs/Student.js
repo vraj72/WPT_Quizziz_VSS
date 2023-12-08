@@ -107,6 +107,9 @@ router_student.post('/enroll',(request,response) =>{
                 if (error.code=='ER_DUP_ENTRY'){
                         response.status(StatusCodes.BAD_REQUEST).send({message: "Already enrolled"})
                 }
+                else if (error.code == 'ER_NO_REFERENCED_ROW_2' ){
+                    response.status(StatusCodes.BAD_REQUEST).send({message: "Course Doesn't Exist"});
+                }
                 else{
                 response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({message: "Internal server Error"})
                 throw error;
@@ -122,13 +125,48 @@ router_student.post('/enroll',(request,response) =>{
 
 
 
-////////////////////////////
-// register
-// login
-// showCourses
-// enrollToCourse
-// showMyEnrolledCourses
-// listQuizzesOnCourse
+//////////////////////////// ShowMyEnrolledCourses ////////////////////////////////////////////////////
+
+router_student.get('/elist',(request,response)=>{
+
+    const Student_ID = request.body.Student_ID;
+
+mysqlConnection.query(`SELECT Course_ID from Enrollement where Student_ID="${Student_ID}"`,(error,result,fields)=>{
+        if(error)
+        {
+                response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({message: "Error"})
+                throw error;
+        }
+        else{
+            response.send({result : result})
+        }
+});
+});
+//////////////////////////////////// List Quizzez On Course ///////////////////////////////////////////
+
+
+router_student.get('/qListOnCourse',(request,response)=>{
+
+        const Course_ID = request.body.Course_ID;
+
+        mysqlConnection.query(`Select title from Quizz where Course_ID="${Course_ID}"`,(error,result,fields)=>{
+                if(error){
+                    response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({message : "Error"})
+                    throw error;
+                }
+                else{
+                    response.send({result : result})
+                }
+        });
+});
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+// register (done)
+// login (done)
+// showCourses (done)
+// enrollToCourse (done)
+// showMyEnrolledCourses (to do)
+// listQuizzesOnCourse (to do)
 // attemptQuiz
 // submitQuizz
 // seeAttemptedQuizz
