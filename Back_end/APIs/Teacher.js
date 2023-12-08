@@ -1,17 +1,19 @@
 import { Router, request } from "express";
 import { StatusCodes } from "http-status-codes";
 import mysqlConnection from "../db_connection/mysql_db.js";
-import connectMongoDB from "../db_connection/mongo_db.js";
 import { Quizz } from "../Models/quizModel.js";
 
 const router_teacher = Router();
 
+/////////////////////////Welcome /////////////////////////
 router_teacher.get("/", (request, response) => {
   response
     .status(StatusCodes.OK)
     .send({ message: "Teacher API Welcome 123..." });
 });
 
+
+////////////////////////Register////////////////////////
 router_teacher.post('/register',(request, response)=>{
   const Name = request.body.Name;
   const Email = request.body.Email;
@@ -40,6 +42,7 @@ router_teacher.post('/register',(request, response)=>{
 
 });
 
+///////////////////////////Login////////////////////////////////////////
 router_teacher.post("/login", (request, response) => {
   console.log(request.body);
   const email = request.body.email;
@@ -86,7 +89,7 @@ router_teacher.post("/login", (request, response) => {
 });
 
 
-
+////////////////////////////List allTeacher //////////////////////////////////////////
 router_teacher.get("/list", (request, response) => {
   mysqlConnection.query(`SELECT * FROM Teacher;`, (error, results, feilds) => {
     if (error) {
@@ -101,6 +104,8 @@ router_teacher.get("/list", (request, response) => {
   });
 });
 
+
+///////////////////////////////////////CreateQuiz//////////////////////////////////
 router_teacher.post("/createQuizz", async (request, response) => {
   const rb = request.body;
   //creating mongo object first
@@ -145,6 +150,10 @@ router_teacher.post("/createQuizz", async (request, response) => {
   }
 });
 
+
+
+
+/////////////////////////////EditQuizz///////////////////////////////////////
 router_teacher.post("/editQuizz", async (request, response) => {
   const rb = request.body;
   const _ID = request.body._ID;
@@ -173,6 +182,9 @@ router_teacher.post("/editQuizz", async (request, response) => {
   }
 });
 
+
+
+/////////////////////////////////GetQuizz///////////////////////////////
 router_teacher.get('/getQuizz', async(request, response)=>{
     const _ID = request.body._ID;
     const Quizz_ID = request.body.Quizz_ID;
@@ -185,16 +197,16 @@ router_teacher.get('/getQuizz', async(request, response)=>{
     }
   
 });
-
-// register
-// login
-// createCourse ()
+/////////////////////////////////////////////////////////////
+// register               (done)
+// login                  (done)
+// createCourse           ()
 // showMyCourses
 // showEnrollementOnCourse
-// createQuizz (done)
-// editQuizz (done)
-// getQuizz (done)
 // showMyQuizzList (on particular course)
+// createQuizz            (done)
+// editQuizz              (done)
+// getQuizz               (done)
 // showAttemptsOnQuizz
 
 export default router_teacher;

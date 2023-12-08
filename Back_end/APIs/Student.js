@@ -1,6 +1,8 @@
-import { Router } from 'express';
+import { Router, request } from 'express';
 import { StatusCodes } from "http-status-codes";
 import mysqlConnection from '../db_connection/mysql_db.js';
+import { Quizz } from '../Models/quizModel.js';
+import { QuizzAttempt } from '../Models/quizAttemptModel.js';
 
 const router_student = Router();
 
@@ -132,6 +134,116 @@ router_student.post('/enroll',(request,response) =>{
 // attemptQuiz
 // submitQuizz
 // seeAttemptedQuizz
+
+
+/////////////////////////////attemptQuiz/////////////////////////////////
+// router_student.post('/attemptQuizz',async (request,response)=>{
+//     const _ID = request.body._ID;
+//     try{
+//         const result = Quizz.findById({_iD : _ID});
+//         console.log(result);
+//         response.status(StatusCodes.OK).send(result);
+
+//     }catch(error){
+//         console.log(error);
+//         response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({message: "Internal server Error"})
+//     }
+// });
+
+router_student.post('/attemptQuizz', async(request, response)=>{
+    const _ID = request.body._ID;
+    try{
+        const result = await Quizz.findById({_id : _ID});
+        var questions =  result._doc.questions ;
+        console.log("printing questions ",questions)
+        var questions_without_answer = [];
+
+        for(var i = 0 ; i<questions.length; i++){
+          const q = questions[i];
+           var nq = { question: q.question, options: q.options, marks : q.marks};    
+            console.log("nq::: ",nq)
+           questions_without_answer.push(nq);
+        }
+
+        var quizz = { ...result._doc , questions : questions_without_answer};
+        console.log(quizz)
+        response.status(StatusCodes.OK).send(quizz);
+        
+    }catch(error){
+        console.log(error);
+        response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({message:"Internal Server Error"});
+    }
+  
+});
+
+router_student.post('/submitQuizz', async(request, response)=>{
+    const _ID = request.body._id;
+    const Quizz_ID = request.body.Quizz_ID;
+    const passing_percentage = request.body.passing_percentage;
+    const total_marks = request.body.total_marks;
+    const attempted_questions = request.body.questions;
+    var marks = 0;
+
+    try{
+        const quizz = await Quizz.findOne({_id:_ID});
+        console.log(quizz);
+        var to_be_submitted_q = [];
+
+       for( var i = 0 ; i < attempted_questions.length ; i++){
+            var a = attempted_questions[i];
+            var q = quizz.questions[i];
+            console.log("aq ",a,q)
+            if(q.correct_option == a.marked_option ){
+
+                marks = marks + q.marks;
+                to_be_submitted_q.push({
+                    question : q.question,
+                    options : q.options,
+                    correct_option : q.correct_option,
+                    marked_option : a.marked_option,
+                    marks : q.marks,
+                    marks_obtained : q.marks,
+                    status : true
+                })
+                
+            }else{
+
+                to_be_submitted_q.push({
+                    question : q.question,
+                    options : q.options,
+                    correct_option : q.correct_option,
+                    marked_option : a.marked_option,
+                    marks : q.marks,
+                    marks_obtained : 0,
+                    status : false
+                })
+
+            }
+
+       }
+
+       console.log("\n\n\n tobesubmitted :",to_be_submitted_q);
+
+
+       const quizattempt = new QuizzAttempt( {
+                            AID : null,
+                            Quizz_ID : Quizz_ID,
+                            Q_ID : _ID,
+                            Obtained_marks: marks,
+                            passing_percentage : passing_percentage,
+                            total_marks : total_marks,
+                            passing_status : (marks>(total_marks*passing_percentage*0.01))?"PASS":"FAIL",
+                            questions :to_be_submitted_q
+                        });
+        
+        console.log(quizattempt);
+        
+    }catch(error){
+        console.log(error);
+        response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({message:"Internal Server Error"});
+    }
+  
+});
 
 
 export default router_student;
