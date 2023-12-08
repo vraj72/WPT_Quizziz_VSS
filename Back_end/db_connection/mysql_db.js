@@ -1,11 +1,6 @@
 import mysql from "mysql"
-
- const mysqlConnection = mysql.createConnection({
-    host : 'localhost',
-    user : 'root',
-    password : 'cdac',
-    database: 'Quizizz'
-});
+import { mysql_config } from "./mysql_config.js";
+ const mysqlConnection = mysql.createConnection(mysql_config);
 
 export default mysqlConnection;
 

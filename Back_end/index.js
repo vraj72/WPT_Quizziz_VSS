@@ -3,6 +3,7 @@ import { PORT_NO } from "./constants.js";
 import {StatusCodes} from "http-status-codes";
 import router_teacher from "./APIs/Teacher.js";
 import router_student from "./APIs/Student.js";
+import connectMongoDB from "./db_connection/mongo_db.js";
 
 const app = express();
 app.use(express.json());

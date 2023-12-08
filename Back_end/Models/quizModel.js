@@ -1,6 +1,10 @@
 import mongoose, { Mongoose, Schema } from "mongoose";
 
 const quizSchema = new Schema({
+    Quizz_ID : Number,
+    time_in_minutes : Number,
+    passing_percentage : Number,
+    total_marks : Number,
     questions : [
         {
             question : String,
