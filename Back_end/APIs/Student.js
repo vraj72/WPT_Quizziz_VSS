@@ -144,7 +144,7 @@ router_student.get('/elist',(request,response)=>{
 
     const Student_ID = request.body.Student_ID;
 
-mysqlConnection.query(`SELECT * from Enrollement where Student_ID="${Student_ID}"`,(error,result,fields)=>{
+mysqlConnection.query(`SELECT * from Course where Course_Id IN (Select Course_ID from enrollement where Student_ID="${Student_ID}")`,(error,result,fields)=>{
         if(error)
         {
                 response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({message: "Error"})
@@ -155,6 +155,26 @@ mysqlConnection.query(`SELECT * from Enrollement where Student_ID="${Student_ID}
         }
 });
 });
+
+/////////////////////////////////////// Courses not enrolled //////////////////////////////////////////
+
+
+router_student.get('/unenrolledList',(request,response)=>{
+
+    const Student_ID = request.body.Student_ID;
+
+    mysqlConnection.query(`Select * from Course where Course_Id NOT IN (Select Course_ID from enrollement where Student_ID="${Student_ID}")`,(error,result,fields)=>{
+        if(error)
+        {
+                response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({message: "Error"})
+                throw error;
+        }
+        else{
+            response.send({result: result})
+        }
+    });
+});
+
 //////////////////////////////////// List Quizzez On Course ///////////////////////////////////////////
 
 
@@ -172,6 +192,9 @@ router_student.get('/qListOnCourse',(request,response)=>{
                 }
         });
 });
+
+
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 // register (done)
@@ -312,12 +335,14 @@ router_student.post('/submitQuizz', async(request, response)=>{
   
 });
 
-///////////////////////////////////////
+//// seeAttemptedQuizz (A_ID -> mysql  `attempt_mongo_ID` mongodb-> QuizzAttempt ) /////
 
-router_student.post('/seeAQ',(request,response)=>{
-        const A_ID =response.body.A_ID;
-
-
+router_student.post('/seeAQ',async(request,response)=>{
+    const result_f = await QuizzAttempt.save();
+    const attemptedID = result_f._id; // This line fetches the attempted quiz ID
+    
+    response.status(StatusCodes.OK).send({ message: "Quizz submitted", attemptedID });
+    
 });
 
 
