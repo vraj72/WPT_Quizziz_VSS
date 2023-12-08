@@ -6,7 +6,7 @@
 /.pnp
 .pnp.js
 .env
-./Back_end/db_connection/mysql_config.js
+mysql_config.js
 /db_connection/mysql_config.js
 
 # testing
@@ -25,5 +25,3 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-Back_end/db_connection/mysql_config.js
-Back_end/db_connection/mysql_config.js
