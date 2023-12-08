@@ -200,13 +200,119 @@ router_teacher.get('/getQuizz', async(request, response)=>{
 /////////////////////////////////////////////////////////////
 // register               (done)
 // login                  (done)
-// createCourse           ()
-// showMyCourses
-// showEnrollementOnCourse
-// showMyQuizzList (on particular course)
+// createCourse           (done)
+// showMyCourses          (done)
+// showEnrollementOnCourse(done)
+// showMyQuizzListonCourse(done)
 // createQuizz            (done)
 // editQuizz              (done)
 // getQuizz               (done)
-// showAttemptsOnQuizz
+// showAttemptsOnQuizz    (done)
+
+
+
+//////////////////////////////////showMyQuizzListonCourse//////////////////////
+router_teacher.post("/showEnrollementOnCourse", (request, response) => {
+
+  const Course_ID= request.body.Course_ID;
+  mysqlConnection.query(`select * from Enrollement where Course_ID = "${Course_ID}";`, (error, results, feilds) => {
+    if (error) {
+      console.log("Error teacher/showEnrollementOnCourse ", error);
+      response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: "Internal Server Error" });
+      throw error;
+    } else {
+      if(results.length == 0) 
+        response.status(StatusCodes.OK).send({ results: "No Enrollements yet!!" });
+      else
+        response.status(StatusCodes.OK).send({ results: results });
+    }
+  });
+});
+
+
+//////////////////////////////////showMyQuizzListonCourse//////////////////////
+router_teacher.post("/showMyQuizzListonCourse", (request, response) => {
+
+  const Course_ID= request.body.Course_ID;
+  mysqlConnection.query(`select * from Quizz where Course_ID = "${Course_ID}";`, (error, results, feilds) => {
+    if (error) {
+      console.log("Error teacher/showMyQuizzListonCourse ", error);
+      response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: "Internal Server Error" });
+      throw error;
+    } else {
+      if(results.length == 0) 
+        response.status(StatusCodes.OK).send({ results: "No Quizz created yet!!" });
+      else
+        response.status(StatusCodes.OK).send({ results: results });
+    }
+  });
+});
+
+
+
+
+////////////////////////////ShowAttempt On Quizz///////////////////////////
+router_teacher.post("/showAttemptsOnQuizz", (request, response) => {
+  const Quizz_ID= request.body.Quizz_ID;
+  mysqlConnection.query(`select AID, QuizzAttempt.Student_ID , First_Name, Last_Name, Email, marks, status, attempt_mongo_ID 
+  from Student, QuizzAttempt where Student.Student_ID=QuizzAttempt.Student_ID and Quizz_ID = "${Quizz_ID}";`, (error, results, feilds) => {
+    if (error) {
+      console.log("Error teacher/showAttemptsOnQuizz ", error);
+      response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: "Internal Server Error" });
+      throw error;
+    } else {
+      if(results.length == 0) 
+        response.status(StatusCodes.OK).send({ results: "No attempts on Quizz yet!!" });
+      else
+        response.status(StatusCodes.OK).send({ results: results });
+    }
+  });
+});
+
+
+//////////////////////////////listMycourse//////////////////////////
+router_teacher.post("/listMyCourses", (request, response) => {
+  const Teacher_ID= request.body.Teacher_ID;
+  mysqlConnection.query(`SELECT * FROM course where Teacher_ID = "${Teacher_ID}";`, (error, results, feilds) => {
+    if (error) {
+      console.log("Error teacher/listmycourse ", error);
+      response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: "Internal Server Error" });
+      throw error;
+    } else {
+      if(results.length == 0) 
+        response.status(StatusCodes.OK).send({ results: "No Course Created" });
+      else
+        response.status(StatusCodes.OK).send({ results: results });
+    }
+  });
+});
+
+
+////////////////////////CreateCourse///////////////////////////
+router_teacher.post('/createCourse',(request, response)=>{
+  const Course_name = request.body.Course_name;
+  const description = request.body.description;
+  const Teacher_ID = request.body.Teacher_ID;
+  console.log(request.body);
+
+  mysqlConnection.query(`INSERT INTO course ( Course_name, description, Teacher_ID  )
+  values( "${Course_name}", "${description}", ${Teacher_ID} ); `
+  ,(error, result , feilds )=>{
+    if(error){
+      
+        response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({message:"Internal Server Error"});
+        console.log(error);
+        throw error;
+      
+     
+    } else {
+      response.status(StatusCodes.OK).send({message:"Course Created Succesfully",Course_ID : result.insertId ,result, feilds});
+    }
+
+  });
+
+});
+
+
 
 export default router_teacher;
