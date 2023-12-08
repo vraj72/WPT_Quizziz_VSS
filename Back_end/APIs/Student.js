@@ -232,6 +232,7 @@ router_student.post('/submitQuizz', async(request, response)=>{
     const passing_percentage = request.body.passing_percentage;
     const total_marks = request.body.total_marks;
     const attempted_questions = request.body.questions;
+    const Student_ID = request.body.Student_ID;
     var marks = 0;
 
     try{
@@ -288,7 +289,21 @@ router_student.post('/submitQuizz', async(request, response)=>{
         
         console.log(quizattempt);
         const result_f = await quizattempt.save();
-        response.status(StatusCodes.OK).send({message : "Quizz submitted" ,result_f});
+        
+        
+        mysqlConnection.query(`INSERT INTO QuizzAttempt (Quizz_ID,Student_ID,marks,status,attempt_mongo_ID  ) 
+        values(${Quizz_ID}, ${Student_ID},${marks}, ${((marks>(total_marks*passing_percentage*0.01))?1:0)}, "${result_f._id}" )`,(error,mysql_result,fields)=>{
+                if(error){
+                    response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({message : "Error"})
+                    throw error;
+                }
+                else{
+
+                    response.status(StatusCodes.OK).send({message : "Quizz submitted" ,result_f, A_ID : mysql_result.insertId});
+
+                }
+        });
+
         
     }catch(error){
         console.log(error);
