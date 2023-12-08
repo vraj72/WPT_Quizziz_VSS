@@ -133,7 +133,7 @@ router_student.get('/elist',(request,response)=>{
 
     const Student_ID = request.body.Student_ID;
 
-mysqlConnection.query(`SELECT Course_ID from Enrollement where Student_ID="${Student_ID}"`,(error,result,fields)=>{
+mysqlConnection.query(`SELECT * from Enrollement where Student_ID="${Student_ID}"`,(error,result,fields)=>{
         if(error)
         {
                 response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({message: "Error"})
@@ -151,7 +151,7 @@ router_student.get('/qListOnCourse',(request,response)=>{
 
         const Course_ID = request.body.Course_ID;
 
-        mysqlConnection.query(`Select title from Quizz where Course_ID="${Course_ID}"`,(error,result,fields)=>{
+        mysqlConnection.query(`Select * from Quizz where Course_ID="${Course_ID}"`,(error,result,fields)=>{
                 if(error){
                     response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({message : "Error"})
                     throw error;
@@ -167,10 +167,10 @@ router_student.get('/qListOnCourse',(request,response)=>{
 // login (done)
 // showCourses (done)
 // enrollToCourse (done)
-// showMyEnrolledCourses (to do)
-// listQuizzesOnCourse (to do)
-// attemptQuiz
-// submitQuizz
+// showMyEnrolledCourses (done)
+// listQuizzesOnCourse (done)
+// attemptQuiz (done)
+// submitQuizz (done)
 // seeAttemptedQuizz
 
 
@@ -281,6 +281,14 @@ router_student.post('/submitQuizz', async(request, response)=>{
         response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({message:"Internal Server Error"});
     }
   
+});
+
+///////////////////////////////////////
+
+router_student.post('/seeAQ',(request,response)=>{
+        const A_ID =response.body.A_ID;
+
+
 });
 
 
