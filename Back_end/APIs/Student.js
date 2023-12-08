@@ -127,6 +127,17 @@ router_student.post('/enroll',(request,response) =>{
 
 
 
+
+////////////////////////////
+// register
+// login
+// showCourses
+// enrollToCourse
+// showMyEnrolledCourses
+// listQuizzesOnCourse
+// attemptQuiz (done)
+// submitQuizz (done)
+// seeAttemptedQuizz (to do ) (A_ID -> mysql  `attempt_mongo_ID` mongodb-> QuizzAttempt )
 //////////////////////////// ShowMyEnrolledCourses ////////////////////////////////////////////////////
 
 router_student.get('/elist',(request,response)=>{
@@ -172,6 +183,7 @@ router_student.get('/qListOnCourse',(request,response)=>{
 // attemptQuiz (done)
 // submitQuizz (done)
 // seeAttemptedQuizz
+
 
 
 /////////////////////////////attemptQuiz/////////////////////////////////
@@ -275,6 +287,8 @@ router_student.post('/submitQuizz', async(request, response)=>{
                         });
         
         console.log(quizattempt);
+        const result_f = await quizattempt.save();
+        response.status(StatusCodes.OK).send({message : "Quizz submitted" ,result_f});
         
     }catch(error){
         console.log(error);
