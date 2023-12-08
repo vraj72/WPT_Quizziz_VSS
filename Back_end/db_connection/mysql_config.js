@@ -1,8 +1,8 @@
 export const mysql_config ={
     
         host : 'localhost',
-        user : 'root',
-        password : 'cdac',
+        user : 'saisamarth',
+        password : 'student',
         database: 'Quizizz'
     
 }
