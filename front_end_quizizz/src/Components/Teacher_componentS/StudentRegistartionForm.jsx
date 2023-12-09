@@ -1,11 +1,11 @@
 import { Col, Container, Row, Form, Button, Alert } from "react-bootstrap";
-import { THeader } from "./THeader";
+import { Header } from "./Header";
 // import { Form } from "react-router-dom";
 import { useState } from "react";
-import { saveTeachers } from "./fetchTeacher";
-//import { NavigationBar } from './NavigationBar';
+import { saveStudent } from "../services/fetchstudents";
+import { NavigationBar } from './NavigationBar';
 
-export function TRegister(){
+export function StudentRegistartionForm(){
     const[formData ,setFormData] = useState({Name:"",Email:"",Password:"",Mobile_number:""});
     const[issubmitted, setIsSubmitted] = useState(false);
 
@@ -17,7 +17,7 @@ export function TRegister(){
         e.preventDefault();
         try{
             console.log(formData);
-           const result = await saveTeachers(formData);
+           const result = await saveStudent(formData);
            setIsSubmitted(true);
            setFormData({Name:"",Email:"",Password:"",Mobile_number:""})
 
@@ -33,9 +33,11 @@ export function TRegister(){
     }
     return(
         <>
-       <THeader text="Register as Teacher"></THeader>
+        <NavigationBar/>
 
         <Container>
+            <Header text="Register On Student CRUD App"></Header>
+
             <Form onSubmit={handleSubmit}>
                 <Row>
                     <Col lg={4}>
@@ -57,13 +59,7 @@ export function TRegister(){
                 <Col lg={4}>
                         <Form.Group className="mb-3" >
                         <Form.Label>Password:</Form.Label>
-                        <Form.Control value={issubmitted?formData.Password:null} type="Password" name='Password' placeholder="Enter Password.." onChange={handleChange}/>
-                        </Form.Group>
-                    </Col>
-                    <Col lg={4}>
-                        <Form.Group className="mb-3" >
-                        <Form.Label>Mobile_number:</Form.Label>
-                        <Form.Control value={issubmitted?formData.Password:null} type="Number" name='Mobile_number' placeholder="Enter Mobile_number.." onChange={handleChange}/>
+                        <Form.Control value={issubmitted?formData.Password:null} type="text" name='Password' placeholder="Enter Password.." onChange={handleChange}/>
                         </Form.Group>
                     </Col>
                     <Col lg={4}>
