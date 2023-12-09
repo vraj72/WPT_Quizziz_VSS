@@ -314,7 +314,7 @@ router_teacher.post('/createCourse',(request, response)=>{
 });
 
 
-<<<<<<< HEAD
+
 // create course API
 router_teacher.post(`/CreateCourse`,async(request,response)=>{
     console.log(request.body);
@@ -433,7 +433,6 @@ mysqlConnection.query(`SELECT * FROM QuizzAttempt WHERE attempt_mongo_ID="${Quiz
 // getQuizz (done)
 // showMyQuizzList (on particular course) (shubham c id input)
 // showAttemptsOnQuiz(shubham  q id input)
-=======
->>>>>>> 48005ef91efe16d36750647a2c7041d8eaaa8b7f
+
 
 export default router_teacher;
