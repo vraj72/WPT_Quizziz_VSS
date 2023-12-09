@@ -66,7 +66,7 @@ router_teacher.post("/login", (request, response) => {
         if (results.length == 0) {
           //query empty set return
           response
-            .status(StatusCodes.BAD_REQUEST)
+            .status(StatusCodes.OK)
             .send({ message: "Invalid Username" });
         } else {
           //query returning values
@@ -75,11 +75,11 @@ router_teacher.post("/login", (request, response) => {
             //password chcek
             response
               .status(StatusCodes.OK)
-              .send({ messge: "Logged in Succesfully" });
+              .send({ message: "Logged in Succesfully" });
           } else {
             //if password does not check
             response
-              .status(StatusCodes.BAD_REQUEST)
+              .status(StatusCodes.OK)
               .send({ messge: "Enter Correct password" });
           }
         }

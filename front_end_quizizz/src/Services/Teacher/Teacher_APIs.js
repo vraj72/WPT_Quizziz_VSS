@@ -8,8 +8,21 @@ export async function fetchTeachers(){
         const reposnse = await axios.get("http://127.0.0.1:45001/teacher/");
         return reposnse.data.students;
     }catch(error){
+        console.log("errror  ",error)
+    }
+}
+
+export async function loginTeacher(data){
+    try{
+
+        const response = await axios.post('http://127.0.0.1:45001/teacher/login',data);
+        console.log("Login response : ",response);
+        return response;
+
+    }catch(error){
         console.log(error)
     }
+
 }
 
 export async function fetchMyCourses(){

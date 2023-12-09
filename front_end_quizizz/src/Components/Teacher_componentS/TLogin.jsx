@@ -2,34 +2,30 @@ import { Col, Container, Row, Form, Button, Alert } from "react-bootstrap";
 import { useState } from "react";
 import { THeader } from "./THeader";
 import { saveTeachers } from "./fetchTeacher";
+import { loginTeacher } from "../../Services/Teacher/Teacher_APIs";
 
 //import { useState } from "react";
 
 export function TLogin(props){
-    const[formData ,setFormData] = useState({Email:"",Password:""});
-    const[issubmitted, setIsSubmitted] = useState(false);
+
+    const[formData ,setFormData] = useState({email:"",password:""});
 
     const handleChange = (e)=>{
-        setFormData({...formData, [e.target.name]: e.target.value})
+        setFormData({...formData, [e.target.name]: e.target.value});
+        console.log(formData);
     }
 
     const handleSubmit= async (e)=>{
         e.preventDefault();
-        try{
-            console.log(formData);
-           const result = await saveTeachers(formData);
-           setIsSubmitted(true);
-           setFormData({Email:"",Password:""})
+       try{
+            const result = await loginTeacher(formData);
+            console.log("from login api ",result.data.message)
+            //if result.data.message = invalid username or password then show alert 
+            //if not coreect mesaage then navigate to studnet-dashboard
 
-           setTimeout(()=>{
-                setIsSubmitted(false)
-           },1500)
-
-           console.log(result)
-
-        }catch(erro){
-
-        }
+       }catch(error){
+        console.log(error)
+       }
     }
     
     return(
@@ -42,26 +38,26 @@ export function TLogin(props){
                     <Col lg={4}>
                         <Form.Group className="mb-3" >
                         <Form.Label>Email:</Form.Label>
-                        <Form.Control value={issubmitted?formData.name:null} type="text" name="Email" placeholder="Enter Email.." onChange={handleChange} />
+                        <Form.Control  type="text" name="email" placeholder="Enter Email.." onChange={handleChange} />
                         </Form.Group>
                     </Col>
 
                     <Col lg={4}>
                         <Form.Group className="mb-3" >
                         <Form.Label>Password:</Form.Label>
-                        <Form.Control value={issubmitted?formData.Email:null} type="Password" name='Password' placeholder="Enter Password.." onChange={handleChange}/>
+                        <Form.Control  type="Password" name='password' placeholder="Enter Password.." onChange={handleChange}/>
                         </Form.Group>
                     </Col>
     
                 </Row>
                 <Row>
                     <Col lg={3}>
-                        <Button variant="primary" type='submit' name="submit" value="Register">Login</Button>
+                        <Button variant="primary" type='submit' name="submit" value="Login">Login</Button>
                     </Col>
                 </Row>
                 <Row className="mt-3">
                 <Col lg={4}>
-                    {issubmitted? <Alert variant="sucess">Login Sucessful</Alert>:null}
+                    {/* {issubmitted? <Alert variant="sucess">Login Sucessful</Alert>:null} */}
                     
                 </Col>
             </Row>
