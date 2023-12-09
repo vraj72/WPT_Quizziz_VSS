@@ -1,17 +1,19 @@
 import { Router, request, response } from "express";
 import { StatusCodes } from "http-status-codes";
 import mysqlConnection from "../db_connection/mysql_db.js";
-import connectMongoDB from "../db_connection/mongo_db.js";
 import { Quizz } from "../Models/quizModel.js";
 
 const router_teacher = Router();
 
+/////////////////////////Welcome /////////////////////////
 router_teacher.get("/", (request, response) => {
   response
     .status(StatusCodes.OK)
     .send({ message: "Teacher API Welcome 123..." });
 });
 
+
+////////////////////////Register////////////////////////
 router_teacher.post('/register',(request, response)=>{
   const Name = request.body.Name;
   const Email = request.body.Email;
@@ -40,6 +42,7 @@ router_teacher.post('/register',(request, response)=>{
 
 });
 
+///////////////////////////Login////////////////////////////////////////
 router_teacher.post("/login", (request, response) => {
   console.log(request.body);
   const email = request.body.email;
@@ -86,7 +89,7 @@ router_teacher.post("/login", (request, response) => {
 });
 
 
-
+////////////////////////////List allTeacher //////////////////////////////////////////
 router_teacher.get("/list", (request, response) => {
   mysqlConnection.query(`SELECT * FROM Teacher;`, (error, results, feilds) => {
     if (error) {
@@ -101,6 +104,8 @@ router_teacher.get("/list", (request, response) => {
   });
 });
 
+
+///////////////////////////////////////CreateQuiz//////////////////////////////////
 router_teacher.post("/createQuizz", async (request, response) => {
   const rb = request.body;
   //creating mongo object first
@@ -145,6 +150,10 @@ router_teacher.post("/createQuizz", async (request, response) => {
   }
 });
 
+
+
+
+/////////////////////////////EditQuizz///////////////////////////////////////
 router_teacher.post("/editQuizz", async (request, response) => {
   const rb = request.body;
   const _ID = request.body._ID;
@@ -173,6 +182,9 @@ router_teacher.post("/editQuizz", async (request, response) => {
   }
 });
 
+
+
+/////////////////////////////////GetQuizz///////////////////////////////
 router_teacher.get('/getQuizz', async(request, response)=>{
     const _ID = request.body._ID;
     const Quizz_ID = request.body.Quizz_ID;
@@ -185,7 +197,124 @@ router_teacher.get('/getQuizz', async(request, response)=>{
     }
   
 });
+/////////////////////////////////////////////////////////////
+// register               (done)
+// login                  (done)
+// createCourse           (done)
+// showMyCourses          (done)
+// showEnrollementOnCourse(done)
+// showMyQuizzListonCourse(done)
+// createQuizz            (done)
+// editQuizz              (done)
+// getQuizz               (done)
+// showAttemptsOnQuizz    (done)
 
+
+
+//////////////////////////////////showMyQuizzListonCourse//////////////////////
+router_teacher.post("/showEnrollementOnCourse", (request, response) => {
+
+  const Course_ID= request.body.Course_ID;
+  mysqlConnection.query(`select * from Enrollement where Course_ID = "${Course_ID}";`, (error, results, feilds) => {
+    if (error) {
+      console.log("Error teacher/showEnrollementOnCourse ", error);
+      response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: "Internal Server Error" });
+      throw error;
+    } else {
+      if(results.length == 0) 
+        response.status(StatusCodes.OK).send({ results: "No Enrollements yet!!" });
+      else
+        response.status(StatusCodes.OK).send({ results: results });
+    }
+  });
+});
+
+
+//////////////////////////////////showMyQuizzListonCourse//////////////////////
+router_teacher.post("/showMyQuizzListonCourse", (request, response) => {
+
+  const Course_ID= request.body.Course_ID;
+  mysqlConnection.query(`select * from Quizz where Course_ID = "${Course_ID}";`, (error, results, feilds) => {
+    if (error) {
+      console.log("Error teacher/showMyQuizzListonCourse ", error);
+      response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: "Internal Server Error" });
+      throw error;
+    } else {
+      if(results.length == 0) 
+        response.status(StatusCodes.OK).send({ results: "No Quizz created yet!!" });
+      else
+        response.status(StatusCodes.OK).send({ results: results });
+    }
+  });
+});
+
+
+
+
+////////////////////////////ShowAttempt On Quizz///////////////////////////
+router_teacher.post("/showAttemptsOnQuizz", (request, response) => {
+  const Quizz_ID= request.body.Quizz_ID;
+  mysqlConnection.query(`select AID, QuizzAttempt.Student_ID , First_Name, Last_Name, Email, marks, status, attempt_mongo_ID 
+  from Student, QuizzAttempt where Student.Student_ID=QuizzAttempt.Student_ID and Quizz_ID = "${Quizz_ID}";`, (error, results, feilds) => {
+    if (error) {
+      console.log("Error teacher/showAttemptsOnQuizz ", error);
+      response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: "Internal Server Error" });
+      throw error;
+    } else {
+      if(results.length == 0) 
+        response.status(StatusCodes.OK).send({ results: "No attempts on Quizz yet!!" });
+      else
+        response.status(StatusCodes.OK).send({ results: results });
+    }
+  });
+});
+
+
+//////////////////////////////listMycourse//////////////////////////
+router_teacher.post("/listMyCourses", (request, response) => {
+  const Teacher_ID= request.body.Teacher_ID;
+  mysqlConnection.query(`SELECT * FROM course where Teacher_ID = "${Teacher_ID}";`, (error, results, feilds) => {
+    if (error) {
+      console.log("Error teacher/listmycourse ", error);
+      response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: "Internal Server Error" });
+      throw error;
+    } else {
+      if(results.length == 0) 
+        response.status(StatusCodes.OK).send({ results: "No Course Created" });
+      else
+        response.status(StatusCodes.OK).send({ results: results });
+    }
+  });
+});
+
+
+////////////////////////CreateCourse///////////////////////////
+router_teacher.post('/createCourse',(request, response)=>{
+  const Course_name = request.body.Course_name;
+  const description = request.body.description;
+  const Teacher_ID = request.body.Teacher_ID;
+  console.log(request.body);
+
+  mysqlConnection.query(`INSERT INTO course ( Course_name, description, Teacher_ID  )
+  values( "${Course_name}", "${description}", ${Teacher_ID} ); `
+  ,(error, result , feilds )=>{
+    if(error){
+      
+        response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({message:"Internal Server Error"});
+        console.log(error);
+        throw error;
+      
+     
+    } else {
+      response.status(StatusCodes.OK).send({message:"Course Created Succesfully",Course_ID : result.insertId ,result, feilds});
+    }
+
+  });
+
+});
+
+
+<<<<<<< HEAD
 // create course API
 router_teacher.post(`/CreateCourse`,async(request,response)=>{
     console.log(request.body);
@@ -304,5 +433,7 @@ mysqlConnection.query(`SELECT * FROM QuizzAttempt WHERE attempt_mongo_ID="${Quiz
 // getQuizz (done)
 // showMyQuizzList (on particular course) (shubham c id input)
 // showAttemptsOnQuiz(shubham  q id input)
+=======
+>>>>>>> 48005ef91efe16d36750647a2c7041d8eaaa8b7f
 
 export default router_teacher;
