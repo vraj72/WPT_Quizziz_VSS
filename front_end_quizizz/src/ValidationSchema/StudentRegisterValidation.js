@@ -23,11 +23,11 @@ export const StudentRegistrationSchema = Yup.object().shape({
 //    // .phone()
 //     .required(0),
 
-    Mobile_No: Yup.number()
+    mobile_no: Yup.string()
     .min(10,"Check Number")
     .required("Mobile number is required"),
 
-    password: Yup.string()
+    pswrd: Yup.string()
       .required("Password is required")
       .min(4, "Password is too short - should be 4 chars minimum"),
   });

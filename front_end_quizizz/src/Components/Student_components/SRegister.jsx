@@ -1,5 +1,5 @@
 import { SHeader } from "./SHeader";
-import { Col, Container, Row, Form as BsForm, Button } from "react-bootstrap";
+import { Alert, Col, Container, Row, Form as BsForm, Button } from "react-bootstrap";
 import { useState } from "react";
 import { SNavigationBar } from './SNavigationBar';
 import { Field, Formik } from "formik";
@@ -10,15 +10,29 @@ import { useNavigate } from 'react-router-dom';
 
 export function SRegister() {
 
+    const navigate = useNavigate();
+    const [registrationError,setRegistrationError]=useState(false);
+
     return (
         <>
             <SNavigationBar />
             <Container className="regForm">
                 <SHeader text="Student Registration"></SHeader>
-                <Formik initialValues={{ first_name: "", last_name: "", email: "", gender: "", Mobile_No: "", password: "" }}
+                <Formik initialValues={{ first_name: "", last_name: "", email: "", gender: "", mobile_No: "", pswrd: "" }}
                     validationSchema={StudentRegistrationSchema}
-                    onSubmit={(values) => {
-                        console.log(values);
+                    onSubmit={async (values) => {
+                        try {
+                            const res = "Registration Successful!"
+                            const result = await registerStudent(values);
+                            console.log("from registration API",result.data.message)
+                            if(res == result.data.message){
+                                navigate("/Student-login")
+                            }else{
+                                setRegistrationError(true);
+                            }
+                        } catch (error) {
+                            console.log(error);
+                        }
                     }}>
 
                     {
@@ -80,8 +94,8 @@ export function SRegister() {
                                     <Row>
                                         <Col lg={4}>
                                             <BsForm.Group className="mb-3" id="query" >
-                                                <BsForm.Label>Mobile Number</BsForm.Label>
-                                                <Field id="Mobile_Number" name="Mobile_No" type="number" placeholder="Enter Mobile Number" className="form-control" onChange={handleChange} />
+                                                <BsForm.Label>Mobile number</BsForm.Label>
+                                                <Field id="Mobile_Number" name="mobile_no" type="number" placeholder="Enter Mobile Number" className="form-control" onChange={handleChange} />
                                                 {touched.Mobile_No && errors.Mobile_No ? <span className="error">{errors.Mobile_No}</span> : null}
                                             </BsForm.Group>
                                         </Col>
@@ -92,7 +106,7 @@ export function SRegister() {
                                             <BsForm >
                                                 <BsForm.Group className="mb-3" id="query" >
                                                     <BsForm.Label>Password</BsForm.Label>
-                                                    <Field id="password" type="password" name="password" placeholder="Enter Password" className="form-control" onChange={handleChange} onSubmit={Formik.handleSubmit} />
+                                                    <Field id="password" type="password" name="pswrd" placeholder="Enter Password" className="form-control" onChange={handleChange} onSubmit={Formik.handleSubmit} />
                                                     {touched.password && errors.password ? <span className="error">{errors.password}</span> : null}
                                                 </BsForm.Group>
                                             </BsForm>
@@ -103,6 +117,7 @@ export function SRegister() {
                                             Register
                                         </Button>
                                     </BsForm>
+                                    {registrationError?<Alert variant="danger" className="mt-3">Invalid</Alert>:null}
                                 </>
 
                             )
