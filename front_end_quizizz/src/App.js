@@ -27,6 +27,7 @@ function App() {
     <BrowserRouter>
     <Routes>
       <Route path='/' element={<SLogin/>}></Route>
+      <Route path='/student-login' element={<SLogin/>}></Route>
       <Route path='/student-register' element={<SRegister/>}></Route>
       <Route path='/student-dashboard' element={<SDashBoard/>}></Route>
       <Route path='/student-attempt-quiz/:Quizz_ID' element={<SAttemptQuiz/>}></Route>

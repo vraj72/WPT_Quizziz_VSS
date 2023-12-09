@@ -1,5 +1,31 @@
 import axios from "axios";
 import { getStudentID, getStudentToken } from "../../Utiles/Student_utiles/StudentTokenUtiles";
+import { useNavigate } from 'react-router-dom';
+
+
+export async function loginStudent(data){
+    try {
+        const response = await axios.post('http://127.0.0.1:45001/student/login',data);
+        console.log("Login response : ",response)
+        return response;
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+export async function registerStudent(data){
+    try {
+        const response = await axios.post('http://127.0.0.1:45001/student/register',data);
+        console.log("Register :",response)
+        return response;
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+
 
 export async function fetchStudents(){
     try{

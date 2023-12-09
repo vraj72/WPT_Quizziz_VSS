@@ -27,13 +27,13 @@ router_student.post('/login', (request, response) => {
             console.log(results);
 
             if (results.length == 0) { //query empty set return 
-                response.status(StatusCodes.BAD_REQUEST).send({ message: "Invalid Username" });
+                response.status(StatusCodes.OK).send({ message: "Invalid Username" });
             } else { //query returning values
                 const pswrd = results[0].pswrd;
                 if (password == pswrd) { //password check
-                    response.status(StatusCodes.OK).send({ messge: "Logged in Succesfully" });
+                    response.status(StatusCodes.OK).send({ message: "Logged in Succesfully" });
                 } else { //if password does not check 
-                    response.status(StatusCodes.BAD_REQUEST).send({ messge: "Enter Correct password" });
+                    response.status(StatusCodes.OK).send({ message: "Enter Correct password" });
                 }
             }
         }

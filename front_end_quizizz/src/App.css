@@ -39,5 +39,39 @@
 
 .error
 {
-  color: red;
+  color: rgb(234, 8, 8);
 }
+
+/* .regForm
+{
+  background: linear-gradient(#2C3E50,#4CA1AF)
+}
+
+#query{
+  font-size: 20px;
+  color: antiquewhite;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: 1000;
+}
+
+#first{
+  font-weight: 900;
+}
+
+#last{
+  font-weight: 900;
+}
+
+#email{
+  font-weight: 900;
+}
+
+#Mobile_Number{
+  font-weight: 900;
+}
+
+#password{
+  font-weight: 900;
+} */
+
+
