@@ -1,4 +1,4 @@
-import { Router, request } from "express";
+import { Router, request, response } from "express";
 import { StatusCodes } from "http-status-codes";
 import mysqlConnection from "../db_connection/mysql_db.js";
 import connectMongoDB from "../db_connection/mongo_db.js";
@@ -186,15 +186,123 @@ router_teacher.get('/getQuizz', async(request, response)=>{
   
 });
 
+// create course API
+router_teacher.post(`/CreateCourse`,async(request,response)=>{
+    console.log(request.body);
+    const Course_name = request.body.Course_name;
+    const description = request.body.description;
+    const Teacher_ID  = request.body.Teacher_ID;
+
+    mysqlConnection.query(`INSERT INTO course(Course_name,description,Teacher_ID)values("${Course_name}","${description}",${Teacher_ID})`,(error, results , fields)=>{
+      if(error){
+        console.log(error)
+        if(error.code == 'ER_DUP_ENTRY'){
+          response.status(StatusCodes.BAD_REQUEST).send({message:"Course Already Exists"});
+          console.log(error);
+        }else{
+          response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({message:"Internal Server Error"});
+          console.log(error);
+          throw error;
+        }
+      }else{
+        response.status(StatusCodes.OK).send({message:"Course Created Successfully",results, fields});
+
+      }
+    })
+})
+
+// Show My courses API
+router_teacher.get(`/ShowCourses`,async(request,response)=>{
+    console.log(request.body)
+    const Teacher_ID = request.body.Teacher_ID;
+
+    mysqlConnection.query(`SELECT * FROM Course WHERE Teacher_ID = "${Teacher_ID}"`,(error,result,fields)=>{
+        if(error)
+        {
+          response.status(StatusCodes.BAD_REQUEST).send({message:"No such Data exists",results,fields})
+          console.log(error)
+          
+        }
+        else
+        {
+          response.status(StatusCodes.OK).send({message:"Courses Fetched Succesfully",result, fields});
+        }
+
+    });
+});
+
+//show enrollment on courses
+router_teacher.get(`/ShowEnrolledCourses`, async(request,response)=>{
+  console.log(request.body)
+  const Teacher_ID = request.body.Teacher_ID
+
+  mysqlConnection.query(`SELECT Course_name FROM Course WHERE IN(SELECT Course_ID FROM Enrollement WHERE Student_ID="${Teacher_ID}")`,(error , result , fields)=>{
+
+    if(error)
+    {
+      response.status(StatusCodes.BAD_REQUEST).send({message : "---",results,fields})
+    }
+    else
+    {
+      response.status(StatusCodes.OK).send({message:"Opertion Successful",results,fields});
+    }
+  }) // ASK VIRAJ ABOUT THIS QUERY
+})
+
+
+//SHOW MYQUIZ API
+router_teacher.get("/showMyQuizzList", async(request,response)=>{
+  console.log(request.body)
+  const Course_ID = request.body.Course_ID;
+
+  mysqlConnection.query(`SELECT title from quizz WHERE Course_ID="${Course_ID}"`,(error,results,field)=>{
+    if(error)
+    {
+      response.status(StatusCodes.BAD_REQUEST).send({message : "could not find data",results})
+    }
+    else
+    {
+      response.status(StatusCodes.OK).send({message:"Data Fetched successfully",results,fields})
+    }
+  })
+})
+
+
+//showAttemptsOnQuiz
+router_teacher.get("/showAttemptsOnQuiz",async(request,response)=>{
+const Quizz_ID = request.body.Quizz_ID
+
+mysqlConnection.query(`SELECT * FROM QuizzAttempt WHERE attempt_mongo_ID="${Quizz_ID}"`,(error,results,fields)=>{
+  if(error)
+  {
+    response.status(StatusCodes.BAD_REQUEST).send({message:"Such data does not exists",results,fields})
+  }
+  else{
+    response.status(StatusCodes.OK).send({message:"Data fetched succesfully",results,fields})
+
+  }
+
+
+})
+
+})
+
+
+
+
+
+
+
+
 // register
 // login
-// createCourse ()
-// showMyCourses
+// createCourse (done)
+// showMyCourses (inprocess)
 // showEnrollementOnCourse
 // createQuizz (done)
 // editQuizz (done)
 // getQuizz (done)
-// showMyQuizzList (on particular course)
-// showAttemptsOnQuizz
+// showMyQuizzList (on particular course) (shubham c id input)
+// showAttemptsOnQuiz(shubham  q id input)
 
 export default router_teacher;
