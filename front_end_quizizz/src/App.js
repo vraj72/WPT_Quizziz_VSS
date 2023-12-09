@@ -33,6 +33,7 @@ function App() {
       <Route path='/student-see-quiz-results' element={<SSeeQuizResult/>}></Route>
       <Route path='/student-see-quizes' element={<SSeeQuizes/>}></Route>
  
+////////////////////////////////////////////////////////////////////////////////////
 
       <Route path='/teacher-login' element={<TLogin/>}></Route>
       <Route path='/teacher-register' element={<TRegister/>}></Route>
