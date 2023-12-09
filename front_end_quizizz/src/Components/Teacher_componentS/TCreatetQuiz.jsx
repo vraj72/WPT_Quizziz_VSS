@@ -109,10 +109,12 @@ export function TCreatetQuiz(props){
                         </Form.Group>
                         
                         <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
+                            <Form.Check column sm="2" type="radio" name="correct_option"></Form.Check>
                             <Form.Label column sm="2">
-                            Opt A.
+                             A.
                             </Form.Label>
-                            <Col sm="10">
+                            <Col sm="8">
+                            
                             <Form.Control name="optionA" type="text" placeholder="Functions which can not be......" />
                             </Col>
                         </Form.Group>
