@@ -4,8 +4,10 @@ import {StatusCodes} from "http-status-codes";
 import router_teacher from "./APIs/Teacher.js";
 import router_student from "./APIs/Student.js";
 import connectMongoDB from "./db_connection/mongo_db.js";
+import cors from "cors";
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 

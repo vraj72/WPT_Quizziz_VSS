@@ -215,7 +215,7 @@ router_teacher.get('/getQuizz', async(request, response)=>{
 router_teacher.post("/showEnrollementOnCourse", (request, response) => {
 
   const Course_ID= request.body.Course_ID;
-  mysqlConnection.query(`select * from Enrollement where Course_ID = "${Course_ID}";`, (error, results, feilds) => {
+  mysqlConnection.query(`select * from Student,Enrollement where Student.Student_ID=Enrollement.Student_ID AND Course_ID = "${Course_ID}";`, (error, results, feilds) => {
     if (error) {
       console.log("Error teacher/showEnrollementOnCourse ", error);
       response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: "Internal Server Error" });

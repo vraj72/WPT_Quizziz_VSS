@@ -103,7 +103,7 @@ router_student.post('/enroll',(request,response) =>{
 
    console.log(Course_ID);
 
-    mysqlConnection.query(`Insert into enrollement (Course_ID, Student_ID, status) 
+    mysqlConnection.query(`Insert into Enrollement (Course_ID, Student_ID, status) 
     values("${Course_ID}","${Student_ID}","0")`,(error, result, fields) => {
             if (error) {
                 if (error.code=='ER_DUP_ENTRY'){
@@ -113,12 +113,11 @@ router_student.post('/enroll',(request,response) =>{
                     response.status(StatusCodes.BAD_REQUEST).send({message: "Course Doesn't Exist"});
                 }
                 else{
-                response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({message: "Internal server Error"})
-                throw error;
+                    response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({message: "Internal server Error"})
+                    throw error;
                 }
             }
             else{
-                response.send({ results: result })
                 response.status(StatusCodes.OK).send({message: "Enrollment Successful",result,fields})
             }
 
@@ -140,11 +139,11 @@ router_student.post('/enroll',(request,response) =>{
 // seeAttemptedQuizz (to do ) (A_ID -> mysql  `attempt_mongo_ID` mongodb-> QuizzAttempt )
 //////////////////////////// ShowMyEnrolledCourses ////////////////////////////////////////////////////
 
-router_student.get('/listofEnrolledCourses',(request,response)=>{
+router_student.post('/listofEnrolledCourses',(request,response)=>{
 
     const Student_ID = request.body.Student_ID;
 
-mysqlConnection.query(`SELECT * from Course where Course_Id IN (Select Course_ID from enrollement where Student_ID="${Student_ID}")`,(error,result,fields)=>{
+mysqlConnection.query(`SELECT * from course where Course_Id IN (Select Course_ID from Enrollement where Student_ID="${Student_ID}")`,(error,result,fields)=>{
         if(error)
         {
                 response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({message: "Error"})
@@ -159,11 +158,11 @@ mysqlConnection.query(`SELECT * from Course where Course_Id IN (Select Course_ID
 /////////////////////////////////////// Courses not enrolled //////////////////////////////////////////
 
 
-router_student.get('/UnenrolledList',(request,response)=>{
+router_student.post('/UnenrolledList',(request,response)=>{
 
     const Student_ID = request.body.Student_ID;
 
-    mysqlConnection.query(`Select * from Course where Course_Id NOT IN (Select Course_ID from enrollement where Student_ID="${Student_ID}")`,(error,result,fields)=>{
+    mysqlConnection.query(`Select * from course where Course_Id NOT IN (Select Course_ID from Enrollement where Student_ID="${Student_ID}")`,(error,result,fields)=>{
         if(error)
         {
                 response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({message: "Error"})
@@ -357,14 +356,17 @@ async function getQuizzAttempt(AID,response){
 
 /////////////  Quiz List on Course Attempted /////////////////////
 
-router_student.get('/ListOfQuizAttemptedByCourse',(request,response)=>{
+router_student.post('/ListOfQuizAttemptedByCourse',(request,response)=>{
 
             const Course_ID = request.body.Course_ID;
+            const Student_ID = request.body.Student_ID;
 
-    mysqlConnection.query(`Select Quizz_ID from QuizzAttempt where Student_ID IN (select Student_ID from enrollement where Course_ID="${Course_ID}")`,(error,result,fields)=>{
+
+    mysqlConnection.query(`Select * from Quizz where Course_ID = ${Course_ID}  and Quizz_ID   IN ( select Quizz_ID from QuizzAttempt where Student_ID = ${Student_ID});`,(error,result,fields)=>{
 
                 if(error){
                     response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({message: "Error"})
+                    throw error;
                 }
                 else{
                     response.send({result : result})
@@ -374,14 +376,16 @@ router_student.get('/ListOfQuizAttemptedByCourse',(request,response)=>{
 
 ////////////////////////////////////////////////
 
-router_student.get('/ListOfQuizUnAttemptedByCourse',(request,response)=>{
+router_student.post('/ListOfQuizUnAttemptedByCourse',(request,response)=>{
 
     const Course_ID = request.body.Course_ID;
+    const Student_ID = request.body.Student_ID;
 
-mysqlConnection.query(`Select Quizz_ID from QuizzAttempt where Student_ID NOTIN (select Student_ID from enrollement where Course_ID="${Course_ID}")`,(error,result,fields)=>{
+mysqlConnection.query(`Select * from Quizz where Course_ID = ${Course_ID}  and Quizz_ID NOT  IN ( select Quizz_ID from QuizzAttempt where Student_ID = ${Student_ID});`,(error,result,fields)=>{
 
         if(error){
             response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({message: "Error"})
+            throw error;
         }
         else{
             response.send({result : result})

@@ -5,6 +5,9 @@ export function isStudentAuthenticated(){
 export function getStudentToken(){
     return localStorage.getItem("Stoken");
 }
+export function getStudentID(){
+    return localStorage.getItem("Student_ID");
+}
 
 export function Studentlogout(){
     localStorage.removeItem("Stoken");

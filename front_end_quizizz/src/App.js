@@ -29,17 +29,17 @@ function App() {
       <Route path='/' element={<SLogin/>}></Route>
       <Route path='/student-register' element={<SRegister/>}></Route>
       <Route path='/student-dashboard' element={<SDashBoard/>}></Route>
-      <Route path='/student-attempt-quiz' element={<SAttemptQuiz/>}></Route>
-      <Route path='/student-see-quiz-results' element={<SSeeQuizResult/>}></Route>
-      <Route path='/student-see-quizes' element={<SSeeQuizes/>}></Route>
+      <Route path='/student-attempt-quiz/:Quizz_ID' element={<SAttemptQuiz/>}></Route>
+      <Route path='/student-see-quiz-results/:Quizz_ID' element={<SSeeQuizResult/>}></Route>
+      <Route path='/student-see-quizes/:Course_ID' element={<SSeeQuizes/>}></Route>
  
 
       <Route path='/teacher-login' element={<TLogin/>}></Route>
       <Route path='/teacher-register' element={<TRegister/>}></Route>
       <Route path='/teacher-dashboard' element={<TDashBoard/>}></Route>
-      <Route path='/teacher-create-quiz' element={<TCreatetQuiz/>}></Route>
-      <Route path='/teacher-see-quiz-results' element={<TSeeQuizResult/>}></Route>
-      <Route path='/teacher-see-quizes' element={<TSeeQuizes/>}></Route>
+      <Route path='/teacher-create-quiz/:Quizz_ID' element={<TCreatetQuiz/>}></Route>
+      <Route path='/teacher-see-quiz-results/:Quizz_ID' element={<TSeeQuizResult/>}></Route>
+      <Route path='/teacher-see-quizes/:Course_ID' element={<TSeeQuizes/>}></Route>
   
     </Routes>
   </BrowserRouter>
