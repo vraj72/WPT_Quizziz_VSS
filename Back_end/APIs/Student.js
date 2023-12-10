@@ -3,6 +3,25 @@ import { StatusCodes } from "http-status-codes";
 import mysqlConnection from '../db_connection/mysql_db.js';
 import { Quizz } from '../Models/quizModel.js';
 import { QuizzAttempt } from '../Models/quizAttemptModel.js';
+import jwt from 'jsonwebtoken';
+
+
+function verifyToken(request, response, next) {
+    const header = request.get('Authorization');
+    if (header) {
+        const token = header.split(" ")[1];
+        jwt.verify(token, "VSS65", (error, payload) => {
+            if (error) {
+                response.status(StatusCodes.UNAUTHORIZED).send({ message: "Invalid" })
+            }
+            else{
+                next();
+            }
+        });
+    } else {
+        response.status(StatusCodes.UNAUTHORIZED).send({ message: "Please Login again" })
+    }
+}
 
 const router_student = Router();
 
@@ -31,7 +50,8 @@ router_student.post('/login', (request, response) => {
             } else { //query returning values
                 const pswrd = results[0].pswrd;
                 if (password == pswrd) { //password check
-                    response.status(StatusCodes.OK).send({ message: "Logged in Succesfully" });
+                    const token = jwt.sign({ email }, "VSS65")
+                    response.status(StatusCodes.OK).send({ message: "Logged in Succesfully", token: token });
                 } else { //if password does not check 
                     response.status(StatusCodes.OK).send({ message: "Enter Correct password" });
                 }
@@ -42,7 +62,7 @@ router_student.post('/login', (request, response) => {
 
 
 //////////////////////////Registration////////////////////////////////////
-router_student.post('/register', (request, response) => {
+router_student.post('/register',verifyToken, (request, response) => {
     const { first_name, last_name, email, gender, mobile_no, pswrd } = request.body;
 
     mysqlConnection.query(
@@ -50,19 +70,20 @@ router_student.post('/register', (request, response) => {
         VALUES ('${first_name}', '${last_name}', '${email}', '${gender}', '${mobile_no}', '${pswrd}')`,
         (error, results, fields) => {
             if (error) {
-              //  if ()
+                //  if ()
                 console.log(error);
                 response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: "Internal Server Error" });
             } else {
+                const token = jwt.sign({ email }, "VSS65")
                 console.log(results);
-                response.status(StatusCodes.OK).send({ message: "Registration Successful!" });
+                response.status(StatusCodes.OK).send({ message: "Registration Successful!", token: token });
             }
         }
     );
 });
 
 //////////////////////Get a list of students////////////////////////////
-router_student.get('/Studentlist', (request, response) => {
+router_student.get('/Studentlist',verifyToken, (request, response) => {
 
     mysqlConnection.query(`SELECT * FROM Student;`, (error, results, feilds) => {
         if (error) {
@@ -79,7 +100,7 @@ router_student.get('/Studentlist', (request, response) => {
 
 ////////////////////Get a list of courses////////////////////////////////////
 
-router_student.get('/Courselist', (request, response) => {
+router_student.get('/Courselist',verifyToken, (request, response) => {
 
     mysqlConnection.query(`SELECT * FROM course;`, (error, results, feilds) => {
         if (error) {
@@ -105,23 +126,23 @@ router_student.post('/enroll', (request, response) => {
     console.log(Course_ID);
 
     mysqlConnection.query(`Insert into Enrollement (Course_ID, Student_ID, status) 
-    values("${Course_ID}","${Student_ID}","0")`,(error, result, fields) => {
-            if (error) {
-                if (error.code=='ER_DUP_ENTRY'){
-                        response.status(StatusCodes.BAD_REQUEST).send({message: "Already enrolled"})
-                }
-                else if (error.code == 'ER_NO_REFERENCED_ROW_2' ){
-                    response.status(StatusCodes.BAD_REQUEST).send({message: "Course Doesn't Exist"});
-                }
-                else{
-                    response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({message: "Internal server Error"})
-                    throw error;
-                }
+    values("${Course_ID}","${Student_ID}","0")`, (error, result, fields) => {
+        if (error) {
+            if (error.code == 'ER_DUP_ENTRY') {
+                response.status(StatusCodes.BAD_REQUEST).send({ message: "Already enrolled" })
             }
-            else{
-                response.status(StatusCodes.OK).send({message: "Enrollment Successful",result,fields})
+            else if (error.code == 'ER_NO_REFERENCED_ROW_2') {
+                response.status(StatusCodes.BAD_REQUEST).send({ message: "Course Doesn't Exist" });
             }
-        
+            else {
+                response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: "Internal server Error" })
+                throw error;
+            }
+        }
+        else {
+            response.status(StatusCodes.OK).send({ message: "Enrollment Successful", result, fields })
+        }
+
     });
 });
 
@@ -140,15 +161,14 @@ router_student.post('/enroll', (request, response) => {
 // seeAttemptedQuizz (to do ) (A_ID -> mysql  `attempt_mongo_ID` mongodb-> QuizzAttempt )
 //////////////////////////// ShowMyEnrolledCourses ////////////////////////////////////////////////////
 
-router_student.post('/listofEnrolledCourses',(request,response)=>{
+router_student.post('/listofEnrolledCourses', (request, response) => {
 
     const Student_ID = request.body.Student_ID;
 
-    mysqlConnection.query(`SELECT * from course where Course_Id IN (Select Course_ID from Enrollement where Student_ID="${Student_ID}")`,(error,result,fields)=>{
-        if(error)
-        {
-                response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({message: "Error"})
-                throw error;
+    mysqlConnection.query(`SELECT * from course where Course_Id IN (Select Course_ID from Enrollement where Student_ID="${Student_ID}")`, (error, result, fields) => {
+        if (error) {
+            response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: "Error" })
+            throw error;
         }
         else {
             response.send({ result: result })
@@ -159,15 +179,14 @@ router_student.post('/listofEnrolledCourses',(request,response)=>{
 /////////////////////////////////////// Courses not enrolled //////////////////////////////////////////
 
 
-router_student.post('/UnenrolledList',(request,response)=>{
+router_student.post('/UnenrolledList', (request, response) => {
 
     const Student_ID = request.body.Student_ID;
 
-    mysqlConnection.query(`Select * from course where Course_Id NOT IN (Select Course_ID from Enrollement where Student_ID="${Student_ID}")`,(error,result,fields)=>{
-        if(error)
-        {
-                response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({message: "Error"})
-                throw error;
+    mysqlConnection.query(`Select * from course where Course_Id NOT IN (Select Course_ID from Enrollement where Student_ID="${Student_ID}")`, (error, result, fields) => {
+        if (error) {
+            response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: "Error" })
+            throw error;
         }
         else {
             response.send({ result: result })
@@ -178,7 +197,7 @@ router_student.post('/UnenrolledList',(request,response)=>{
 //////////////////////////////////// List Quizzez On Course ///////////////////////////////////////////
 
 
-router_student.get('/QuizzlistOnCourse', (request, response) => {
+router_student.get('/QuizzlistOnCourse',verifyToken, (request, response) => {
 
     const Course_ID = request.body.Course_ID;
 
@@ -206,22 +225,6 @@ router_student.get('/QuizzlistOnCourse', (request, response) => {
 // attemptQuiz (done)
 // submitQuizz (done)
 // seeAttemptedQuizz
-
-
-
-/////////////////////////////attemptQuiz/////////////////////////////////
-// router_student.post('/attemptQuizz',async (request,response)=>{
-//     const _ID = request.body._ID;
-//     try{
-//         const result = Quizz.findById({_iD : _ID});
-//         console.log(result);
-//         response.status(StatusCodes.OK).send(result);
-
-//     }catch(error){
-//         console.log(error);
-//         response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({message: "Internal server Error"})
-//     }
-// });
 
 router_student.post('/attemptQuizz', async (request, response) => {
     const _ID = request.body._ID;
@@ -357,21 +360,21 @@ async function getQuizzAttempt(AID, response) {
 
 /////////////  Quiz List on Course Attempted /////////////////////
 
-router_student.post('/ListOfQuizAttemptedByCourse',(request,response)=>{
+router_student.post('/ListOfQuizAttemptedByCourse', (request, response) => {
 
-            const Course_ID = request.body.Course_ID;
-            const Student_ID = request.body.Student_ID;
+    const Course_ID = request.body.Course_ID;
+    const Student_ID = request.body.Student_ID;
 
 
-    mysqlConnection.query(`Select * from Quizz where Course_ID = ${Course_ID}  and Quizz_ID   IN ( select Quizz_ID from QuizzAttempt where Student_ID = ${Student_ID});`,(error,result,fields)=>{
+    mysqlConnection.query(`Select * from Quizz where Course_ID = ${Course_ID}  and Quizz_ID   IN ( select Quizz_ID from QuizzAttempt where Student_ID = ${Student_ID});`, (error, result, fields) => {
 
-                if(error){
-                    response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({message: "Error"})
-                    throw error;
-                }
-                else{
-                    response.send({result : result})
-                }
+        if (error) {
+            response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: "Error" })
+            throw error;
+        }
+        else {
+            response.send({ result: result })
+        }
 
     });
 });
@@ -379,15 +382,15 @@ router_student.post('/ListOfQuizAttemptedByCourse',(request,response)=>{
 ////////////////////////////////////////////////
 
 
-router_student.post('/ListOfQuizUnAttemptedByCourse',(request,response)=>{
+router_student.post('/ListOfQuizUnAttemptedByCourse', (request, response) => {
 
     const Course_ID = request.body.Course_ID;
     const Student_ID = request.body.Student_ID;
 
-mysqlConnection.query(`Select * from Quizz where Course_ID = ${Course_ID}  and Quizz_ID NOT  IN ( select Quizz_ID from QuizzAttempt where Student_ID = ${Student_ID});`,(error,result,fields)=>{
+    mysqlConnection.query(`Select * from Quizz where Course_ID = ${Course_ID}  and Quizz_ID NOT  IN ( select Quizz_ID from QuizzAttempt where Student_ID = ${Student_ID});`, (error, result, fields) => {
 
-        if(error){
-            response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({message: "Error"})
+        if (error) {
+            response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: "Error" })
             throw error;
         }
         else {
