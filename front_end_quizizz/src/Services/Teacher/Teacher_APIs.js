@@ -25,6 +25,19 @@ export async function loginTeacher(data){
 
 }
 
+export async function RegisterTeacher(data)
+{
+    try{
+
+        const response = await axios.post('http://127.0.0.1:45001/teacher/register',data);
+        console.log("Register response : ",response);
+        return response;
+
+    }catch(error){
+        console.log(error)
+    }
+}
+
 export async function fetchMyCourses(){
     try{
         console.log("token",getTeacherToken(), "Teacher_ID", getTeacherID());

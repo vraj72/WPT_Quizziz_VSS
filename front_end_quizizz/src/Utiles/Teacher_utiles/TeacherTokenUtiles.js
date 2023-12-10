@@ -12,4 +12,5 @@ export function getTeacherID(){
 
 export function Teacherlogout(){
     localStorage.removeItem("Ttoken");
+    localStorage.getItem("Teacher_ID");
 }

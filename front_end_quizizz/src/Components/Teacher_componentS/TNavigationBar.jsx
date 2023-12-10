@@ -1,7 +1,13 @@
 import { Navbar, Container, Nav, Button } from "react-bootstrap";
 import {LinkContainer} from "react-router-bootstrap"
+import { Teacherlogout } from "../../Utiles/Teacher_utiles/TeacherTokenUtiles";
+import { useNavigate } from "react-router-dom";
 
 export function TNavigationBar(props){
+  const navigate = useNavigate();
+  const handleLogout = () =>{
+              Teacherlogout();
+            navigate('/')}
     return(
         <Navbar expand="lg" className="bg-body-tertiary">
         <Container>
@@ -19,11 +25,11 @@ export function TNavigationBar(props){
                 </LinkContainer>
 
                 <LinkContainer to="/teacher-register">
-                    <Nav.Link >Teacher Student</Nav.Link>
+                    <Nav.Link >Teacher Register</Nav.Link>
                 </LinkContainer>
                 
             </Nav>
-            <Button variant="danger">Teacher LogOut</Button>
+            <Button variant="danger" onClick={handleLogout}>Teacher LogOut</Button>
           </Navbar.Collapse>
         </Container>
       </Navbar>
