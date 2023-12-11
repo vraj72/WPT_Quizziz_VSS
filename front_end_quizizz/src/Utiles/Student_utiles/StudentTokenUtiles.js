@@ -11,4 +11,5 @@ export function getStudentID(){
 
 export function Studentlogout(){
     localStorage.removeItem("Stoken");
+    localStorage.removeItem("Student_ID");
 }

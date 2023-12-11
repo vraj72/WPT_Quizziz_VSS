@@ -36,7 +36,7 @@ router_student.post('/login', (request, response) => {
     const email = request.body.email;
     const password = request.body.password;
 
-    mysqlConnection.query(`SELECT pswrd FROM student WHERE Email = "${email}"`, (error, results, feilds) => {
+    mysqlConnection.query(`SELECT Student_Id,pswrd FROM student WHERE Email = "${email}"`, (error, results, fields) => {
         //if query error
         if (error) {
             console.log(error);
@@ -51,7 +51,7 @@ router_student.post('/login', (request, response) => {
                 const pswrd = results[0].pswrd;
                 if (password == pswrd) { //password check
                     const token = jwt.sign({ email }, "VSS65")
-                    response.status(StatusCodes.OK).send({ message: "Logged in Succesfully", token: token });
+                    response.status(StatusCodes.OK).send({ message: "Logged in Succesfully", token: token, Student_ID: results[0].Student_Id });
                 } else { //if password does not check 
                     response.status(StatusCodes.OK).send({ message: "Enter Correct password" });
                 }
@@ -118,7 +118,7 @@ router_student.get('/Courselist',verifyToken, (request, response) => {
 /////////////////////////////Enrollment To course///////////////////////
 
 
-router_student.post('/enroll', (request, response) => {
+router_student.post('/enroll',verifyToken, (request, response) => {
 
     const Course_ID = request.body.Course_ID;
     const Student_ID = request.body.Student_ID;

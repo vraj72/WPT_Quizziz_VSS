@@ -140,18 +140,55 @@ export function TCreatetQuiz(props) {
                         </Form.Group>
 
                         <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
-                            <Form.Check column sm="2" type="radio" name="correct_option" value="A" onChange={handleChange}></Form.Check>
-                            <Form.Label column sm="2">
-                                A.
-                            </Form.Label>
-                            <Col sm="8">
-
+                            <Col sm="1">
+                            <Form.Check column sm="1" type="radio" name="correct_option" value="A" onChange={handleChange} defaultChecked></Form.Check>
+                            </Col>
+                            <Col sm="1">   
+                            <Form.Label> A. </Form.Label>
+                            </Col>
+                            <Col sm="10">
                                 <Form.Control name="optionA" type="text" placeholder="Functions which can not be......" />
                             </Col>
                         </Form.Group>
 
                         <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
-                            <Form.Check column sm="2" type="radio" name="correct_option" value="B" onChange={handleChange}></Form.Check>
+                            <Col sm="1">
+                            <Form.Check column sm="1" type="radio" name="correct_option" value="B" onChange={handleChange}></Form.Check>
+                            </Col>
+                            <Col sm="1">   
+                            <Form.Label> B. </Form.Label>
+                            </Col>
+                            <Col sm="10">
+                                <Form.Control name="optionB" type="text" placeholder="Functions which can not be......" />
+                            </Col>
+                        </Form.Group>
+
+                        <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
+                            <Col sm="1">
+                            <Form.Check column sm="1" type="radio" name="correct_option" value="C" onChange={handleChange}></Form.Check>
+                            </Col>
+                            <Col sm="1">   
+                            <Form.Label> C. </Form.Label>
+                            </Col>
+                            <Col sm="10">
+                                <Form.Control name="optionC" type="text" placeholder="Functions which can not be......" />
+                            </Col>
+                        </Form.Group>
+
+                        <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
+                            <Col sm="1">
+                            <Form.Check column sm="1" type="radio" name="correct_option" value="D" onChange={handleChange}></Form.Check>
+                            </Col>
+                            <Col sm="1">   
+                            <Form.Label> D. </Form.Label>
+                            </Col>
+                            <Col sm="10">
+                                <Form.Control name="optionD" type="text" placeholder="Functions which can not be......" />
+                            </Col>
+                        </Form.Group>
+
+                        {/* <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
+                            <Form.Check column sm="2" type="radio" name="correct_option" id="opt" value="B" onChange={handleChange}></Form.Check>
                             <Form.Label column sm="2">
                                 Opt B.
                             </Form.Label>
@@ -178,7 +215,7 @@ export function TCreatetQuiz(props) {
                             <Col sm="10">
                                 <Form.Control name="optionD" type="text" placeholder="Functions which can not be......" />
                             </Col>
-                        </Form.Group>
+                        </Form.Group> */}
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>

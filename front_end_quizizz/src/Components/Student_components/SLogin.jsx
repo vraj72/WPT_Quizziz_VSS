@@ -16,7 +16,7 @@ export function SLogin(props) {
 
     return (
         <>
-            <SNavigationBar />
+          
             <Container className="regForm">
                 <SHeader text="Student Login"></SHeader>
                 <Formik initialValues={{  email: "", password: "" }}
@@ -26,8 +26,10 @@ export function SLogin(props) {
                         try {
                             const res = "Logged in Succesfully";
                             const result = await loginStudent(values);
-                            console.log("from login api ", result.data.message)
+                            console.log("from login api ", result.data.message,result.data.Student_Id)
                             if (res == result.data.message) {
+                                localStorage.setItem('Student_ID' , result.data.Student_Id);
+                                localStorage.setItem('Stoken' , result.data.token);
                                 navigate("/student-dashboard");
                             }else{
                                 setLoginError(true);

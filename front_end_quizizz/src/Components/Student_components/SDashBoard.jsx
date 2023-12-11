@@ -6,7 +6,7 @@ import { Card, Container, Row, Col, Button, Modal, Form } from "react-bootstrap"
 import { useNavigate } from "react-router-dom";
 
 export function SDashBoard(props){
-    localStorage.setItem('Student_ID' , 2001);
+    
     const[ myCourseList , setMyCourseList ]= useState([]);
     const[ myUNCourseList , setMyUNCourseList ]= useState([]);
 
@@ -68,7 +68,7 @@ export function SDashBoard(props){
                 <h4>My Courses</h4><hr></hr>
                 <Container>
                 <Row xs={1} md={4} className="g-4 ">
-                    {(myCourseList.length == 0)?
+                    {(myCourseList.length === 0)?
                     <SHeader text="No Course Enrolled Yet"></SHeader>:
                         myCourseList.map(( course) => (
                             <Col key={course.Course_ID}>
@@ -91,7 +91,7 @@ export function SDashBoard(props){
                 <Container className="mt-5">
                 <h4>Other Courses</h4><hr></hr>
                 <Row xs={1} md={4} className="g-4">
-                    {(myUNCourseList.length == 0)?
+                    {(myUNCourseList.length === 0)?
                     <SHeader text="No Course Available"></SHeader>:
                         myUNCourseList.map(( course) => (
                             <Col key={course.Course_ID}>

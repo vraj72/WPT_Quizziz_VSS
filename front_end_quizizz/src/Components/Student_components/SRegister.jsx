@@ -15,7 +15,7 @@ export function SRegister() {
 
     return (
         <>
-            <SNavigationBar />
+            
             <Container className="regForm">
                 <SHeader text="Student Registration"></SHeader>
                 <Formik initialValues={{ first_name: "", last_name: "", email: "", gender: "", mobile_No: "", pswrd: "" }}

@@ -1,6 +1,5 @@
+import { isStudentAuthenticated } from "../../Utiles/Student_utiles/StudentTokenUtiles";
+
 export function SRedirectIfLoggedIn(props){
-    return(
-        <>
-        </>
-    );
+    if(!isStudentAuthenticated()) return props.children;
 }

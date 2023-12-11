@@ -26,13 +26,13 @@ function App() {
   return (
     <BrowserRouter>
     <Routes>
-      <Route path='/' element={<SLogin/>}></Route>
-      <Route path='/student-login' element={<SLogin/>}></Route>
-      <Route path='/student-register' element={<SRegister/>}></Route>
-      <Route path='/student-dashboard' element={<SDashBoard/>}></Route>
-      <Route path='/student-attempt-quiz/:Quizz_ID' element={<SAttemptQuiz/>}></Route>
-      <Route path='/student-see-quiz-results/:Quizz_ID' element={<SSeeQuizResult/>}></Route>
-      <Route path='/student-see-quizes/:Course_ID' element={<SSeeQuizes/>}></Route>
+      <Route path='/' element={<SRedirectIfLoggedIn><SLogin/></SRedirectIfLoggedIn> }></Route>
+      {/* <Route path='/student-login' element={<SLogin/>}></Route> */}
+      <Route path='/student-register' element={<SRedirectIfLoggedIn><SRegister/></SRedirectIfLoggedIn>}></Route>
+      <Route path='/student-dashboard' element={<SPrivateRoute><SDashBoard/></SPrivateRoute>}></Route>
+      <Route path='/student-attempt-quiz/:Quizz_ID' element={<SPrivateRoute><SAttemptQuiz/></SPrivateRoute>}></Route>
+      <Route path='/student-see-quiz-results/:Quizz_ID' element={<SPrivateRoute><SSeeQuizResult/></SPrivateRoute>}></Route>
+      <Route path='/student-see-quizes/:Course_ID' element={<SPrivateRoute><SSeeQuizes/></SPrivateRoute>}></Route>
  
 ////////////////////////////////////////////////////////////////////////////////////
 

@@ -1,7 +1,15 @@
 import { Navbar, Container, Nav, Button } from "react-bootstrap";
 import {LinkContainer} from "react-router-bootstrap"
+import { Studentlogout } from "../../Utiles/Student_utiles/StudentTokenUtiles";
+import { useNavigate } from "react-router-dom";
 
 export function SNavigationBar(props){
+  const navigate = useNavigate();
+  const handleLogout = () =>{
+              Studentlogout();
+            navigate('/')
+  }
+
     return(
         <Navbar expand="lg" className="bg-body-tertiary">
         <Container>
@@ -14,16 +22,16 @@ export function SNavigationBar(props){
                     <Nav.Link >DashBoard</Nav.Link>
                 </LinkContainer>
 
-                <LinkContainer to="/">
+                {/* <LinkContainer to="/">
                     <Nav.Link >Students Login</Nav.Link>
                 </LinkContainer>
 
                 <LinkContainer to="/student-register">
                     <Nav.Link >Register Student</Nav.Link>
-                </LinkContainer>
+                </LinkContainer> */}
                 
             </Nav>
-            <Button variant="danger">LogOut</Button>
+            <Button variant="danger" onClick={handleLogout}>LogOut</Button>
           </Navbar.Collapse>
         </Container>
       </Navbar>

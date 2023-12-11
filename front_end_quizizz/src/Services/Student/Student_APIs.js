@@ -40,10 +40,10 @@ export async function fetchStudents(){
 
 export async function SfetchMyCourses(){
     try{
-        console.log("token",getStudentToken(), "Studnet_ID", getStudentID());
+        console.log("token",getStudentToken(), "Student_ID", getStudentID());
 
         // const reposnse = await axios.get("http://127.0.0.1:45001/student/",{headers:{'Authorization': getSToken()}});
-        const reposnse = await axios.post("http://127.0.0.1:45001/student/listofEnrolledCourses",{Student_ID : getStudentID()});
+        const reposnse = await axios.post("http://127.0.0.1:45001/student/listofEnrolledCourses",{Student_ID : getStudentID(), token : getStudentToken()});
         console.log("from sserver ",reposnse)
         return reposnse.data.result;
     }catch(error){
@@ -54,10 +54,10 @@ export async function SfetchMyCourses(){
 
 export async function SfetchMyUNCourses(){
     try{
-        console.log("token",getStudentToken(), "Studnet_ID", getStudentID());
+        console.log("token",getStudentToken(), "Student_ID", getStudentID());
 
         // const reposnse = await axios.get("http://127.0.0.1:45001/student/",{headers:{'Authorization': getSToken()}});
-        const reposnse = await axios.post("http://127.0.0.1:45001/student/UnenrolledList",{Student_ID : getStudentID()});
+        const reposnse = await axios.post("http://127.0.0.1:45001/student/UnenrolledList",{Student_ID : getStudentID(), token : getStudentToken()});
         console.log("from sserver UNNN::: ",reposnse)
         return reposnse.data.result;
     }catch(error){
@@ -68,10 +68,10 @@ export async function SfetchMyUNCourses(){
 
 export async function Senroll(Course_ID){
     try{
-        console.log("token",getStudentToken(), "Studnet_ID", getStudentID());
+        console.log("token",getStudentToken(), "Student_ID", getStudentID());
 
         // const reposnse = await axios.get("http://127.0.0.1:45001/student/",{headers:{'Authorization': getSToken()}});
-        const reposnse = await axios.post("http://127.0.0.1:45001/student/enroll",{Student_ID : getStudentID(), Course_ID: Course_ID});
+        const reposnse = await axios.post("http://127.0.0.1:45001/student/enroll",{Student_ID : getStudentID(), Course_ID: Course_ID,token : getStudentToken()});
         console.log("from sserver UNNN::: ",reposnse)
         return reposnse.data.result;
     }catch(error){
@@ -83,7 +83,7 @@ export async function Senroll(Course_ID){
 
 export async function SfetchMyQuizz(Course_ID){
     try{
-        console.log("token",getStudentToken(), "Studnet_ID", getStudentID());
+        console.log("token",getStudentToken(), "Student_ID", getStudentID());
 
         // const reposnse = await axios.get("http://127.0.0.1:45001/student/",{headers:{'Authorization': getSToken()}});
         const reposnse = await axios.post("http://127.0.0.1:45001/student/ListOfQuizUnAttemptedByCourse",{Student_ID : getStudentID(), Course_ID: Course_ID});
@@ -97,7 +97,7 @@ export async function SfetchMyQuizz(Course_ID){
 
 export async function SfetchMyAttemptedQuizz(Course_ID){
     try{
-        console.log("token",getStudentToken(), "Studnet_ID", getStudentID());
+        console.log("token",getStudentToken(), "Student_ID", getStudentID());
 
         // const reposnse = await axios.get("http://127.0.0.1:45001/student/",{headers:{'Authorization': getSToken()}});
         const reposnse = await axios.post("http://127.0.0.1:45001/student/ListOfQuizAttemptedByCourse",{Student_ID : getStudentID(), Course_ID: Course_ID});
@@ -107,3 +107,15 @@ export async function SfetchMyAttemptedQuizz(Course_ID){
         console.log(error)
     }
 }
+
+// // export async function SfetchMyQuizzResult(){
+// //         try {
+// //             console.log("token",getStudentToken(), "Student_ID", getStudentID());
+// //             const response = await axios.post("http://127.0.0.1:45001/student/")
+// //             //response.data;
+// //         } catch (error) {
+// //             console.log(error);
+// //         }
+
+
+// }
