@@ -14,6 +14,14 @@ export function SLogin(props) {
     const navigate = useNavigate();
     const [loginError,setLoginError]=useState(false);
 
+    const handleRegister = (e) =>{
+        navigate('/student-register');
+    }
+
+    const handleTeacherRedirect = () =>{
+        navigate('/teacher-login')
+    }
+
     return (
         <>
           
@@ -73,9 +81,18 @@ export function SLogin(props) {
                                             Log In
                                             
                                         </Button>
+
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<Button variant="success" onClick={handleRegister}>Dont have account ? Register!</Button>
+
                                         
                                     </BsForm>
                                     {loginError?<Alert variant="danger" className="mt-3">Invalid Email or password</Alert>:null}
+                                    <Row className="mt-4">
+                                        <Col lg={1}/>
+                                        <Col lg={3}>
+                                            <Button variant="info" onClick={handleTeacherRedirect} >Go to Teacher Page</Button>
+                                        </Col>
+                                    </Row>
                                 </>
             
                             )

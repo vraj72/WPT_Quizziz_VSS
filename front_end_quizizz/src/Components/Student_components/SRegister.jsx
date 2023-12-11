@@ -13,6 +13,14 @@ export function SRegister() {
     const navigate = useNavigate();
     const [registrationError,setRegistrationError]=useState(false);
 
+    const handleLogin = () =>{
+        navigate('/');
+    }
+
+    const handleTeacherRedirect = () =>{
+        navigate('/teacher-login')
+    }
+
     return (
         <>
             
@@ -116,8 +124,17 @@ export function SRegister() {
                                         <Button variant="primary" type="submit" disabled={!(Formik.dirty && Formik.isValid)}>
                                             Register
                                         </Button>
+
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<Button variant="success" onClick={handleLogin}>Already have account ? Login!</Button>
+
                                     </BsForm>
                                     {registrationError?<Alert variant="danger" className="mt-3">Invalid</Alert>:null}
+                                    <Row className="mt-4">
+                                        <Col lg={1}/>
+                                        <Col lg={3}>
+                                            <Button variant="info" onClick={handleTeacherRedirect} >Go to Teacher Page</Button>
+                                        </Col>
+                                    </Row>
                                 </>
 
                             )

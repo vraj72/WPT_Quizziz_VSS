@@ -3,7 +3,7 @@ import { THeader } from "./THeader";
 import { TNavigationBar } from "./TNavigationBar";
 import { Container, Table, Card, Button, Row, Col , Modal , Form} from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
-import { createQuizz, fetchEStudents, fetchMyQuizz } from "../../Services/Teacher/Teacher_APIs";
+import { createQuizz, fetchEStudents, fetchMyQuizz, rejectEnroll } from "../../Services/Teacher/Teacher_APIs";
 
 export function TSeeQuizes(props){
     const params = useParams();
@@ -79,6 +79,17 @@ export function TSeeQuizes(props){
         navigate(`/teacher-see-quiz-results/${Quizz_ID}`);
     }
 
+    const handleReject = async (e) =>{
+        try{
+            console.log(e.target.name)
+            await rejectEnroll({Eid : e.target.name});
+            fetchEStudents_f(); 
+        }catch(error){
+            console.log(error)
+        }
+
+    }
+
 
     return(
         <>
@@ -134,6 +145,7 @@ export function TSeeQuizes(props){
                             <th>Last Name</th>
                             <th>Email</th>
                             <th>Mobile No</th>
+                            <th>Reject Enrollement</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -145,16 +157,10 @@ export function TSeeQuizes(props){
                                             <td>{s.First_Name}</td>
                                             <td>{s.Last_Name}</td>
                                             <td>{s.Email}</td>
+                                            <td>{s.Mobile_no}</td>
                                             <td>
-                                                {s.Mobile_no}
-                                                {/* <Button variant='danger' onClick={()=>{
-                                                    setSelectedRow(s.roll);
-                                                    handleShow(s.roll);
-                                                }}>Delete</Button> &nbsp; &nbsp; 
-                                                <Button variant='primary' onClick={()=>{
-                                                    setSelectedRow(s.roll);
-                                                    handleEditClick(s.roll);
-                                                }}>Edit</Button> */}
+                                                <Button variant='danger' name={s.Eid} onClick={handleReject}>Reject Request</Button> &nbsp; &nbsp; 
+                                                
                                             </td>
                                         </tr>
                                     )

@@ -332,6 +332,32 @@ router_teacher.post('/createCourse',verifyToken,(request, response)=>{
 
 
 
+router_teacher.post('/EditCourse',verifyToken,(request, response)=>{
+  const Course_ID = request.body.Course_ID;
+  const Course_name = request.body.ECourse_name;
+  const description = request.body.Edescription;
+  const Teacher_ID = request.body.Teacher_ID;
+  console.log(request.body);
+
+  mysqlConnection.query(`Update course set Course_name = "${Course_name}", description = "${description}" where Course_ID = ${Course_ID}`
+  ,(error, result , feilds )=>{
+    if(error){
+      
+        response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({message:"Internal Server Error"});
+        console.log(error);
+        throw error;
+      
+     
+    } else {
+      response.status(StatusCodes.OK).send({message:"Course Created Succesfully",Course_ID : result.insertId ,result, feilds});
+    }
+
+  });
+
+});
+
+
+
 // create course API
 router_teacher.post(`/CreateCourse`,verifyToken,async(request,response)=>{
     console.log(request.body);
@@ -432,6 +458,28 @@ mysqlConnection.query(`SELECT * FROM QuizzAttempt WHERE attempt_mongo_ID="${Quiz
 })
 
 })
+
+
+
+
+router_teacher.post('/rejectEnroll',verifyToken, (request, response) => {
+
+  const Eid = request.body.Eid;
+
+
+  mysqlConnection.query(`DELETE FROM  Enrollement  WHERE Eid = ${Eid}`, (error, result, fields) => {
+      if (error) {
+         
+              response.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: "Internal server Error" })
+              throw error;
+          
+      }
+      else {
+          response.status(StatusCodes.OK).send({ message: "Operation Succesfull", result, fields })
+      }
+
+  });
+});
 
 
 

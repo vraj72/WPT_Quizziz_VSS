@@ -17,6 +17,14 @@ export function TLogin(props){
         setFormData({...formData, [e.target.name]: e.target.value});
         console.log(formData);
     }
+
+    const handleRegister =()=>{
+        navigate('/teacher-register');
+    }
+
+    const handleStudentRedirect = () =>{
+        navigate('/')
+    }
    
 
     const handleSubmit= async (e)=>{
@@ -70,13 +78,19 @@ export function TLogin(props){
                     <Col lg={3}>
                         <Button variant="primary" type='submit' name="submit" value="Login">Login</Button>
                     </Col>
+
+                  
+                    <Col lg={3}>
+                        <Button variant="success" onClick={handleRegister} >Dont have teacher Account? Register!</Button>
+                    </Col>
+                
                 </Row>
-                <Row className="mt-3">
-                <Col lg={4}>
-                    {/* {issubmitted? <Alert variant="sucess">Login Sucessful</Alert>:null} */}
-                    
-                </Col>
-            </Row>
+                <Row className="mt-4">
+                    <Col lg={1}/>
+                    <Col lg={3}>
+                        <Button variant="info" onClick={handleStudentRedirect} >Go to Student Page</Button>
+                    </Col>
+                 </Row>
             
             </Form>
             

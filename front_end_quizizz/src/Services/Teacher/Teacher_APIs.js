@@ -94,6 +94,30 @@ export async function createCourse(data){
     }
 }
 
+
+export async function editCourse(data){
+    try{
+        //console.log("token",getTeacherToken(), "Teacher_ID", getTeacherID());
+        // const reposnse = await axios.get("http://127.0.0.1:45001/student/",{headers:{'Authorization': getSToken()}});
+        const reposnse = await axios.post("http://127.0.0.1:45001/teacher/editCourse",{Teacher_ID : getTeacherID(),...data },{headers:{'Authorization': getTeacherToken()}});
+        return reposnse.data.results;
+    }catch(error){
+        console.log(error)
+    }
+}
+
+
+export async function rejectEnroll(data){
+    try{
+        //console.log("token",getTeacherToken(), "Teacher_ID", getTeacherID());
+        // const reposnse = await axios.get("http://127.0.0.1:45001/student/",{headers:{'Authorization': getSToken()}});
+        const reposnse = await axios.post("http://127.0.0.1:45001/teacher/rejectEnroll",{Teacher_ID : getTeacherID(),...data },{headers:{'Authorization': getTeacherToken()}});
+        return reposnse.data.results;
+    }catch(error){
+        console.log(error)
+    }
+}
+
 export async function createQuizz(data){
     try{
         //console.log("token",getTeacherToken(), "Teacher_ID", getTeacherID());

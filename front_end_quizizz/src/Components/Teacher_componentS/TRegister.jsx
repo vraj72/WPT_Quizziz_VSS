@@ -17,6 +17,13 @@ export function TRegister(props){
         setFormData({...formData, [e.target.name]: e.target.value})
         console.log(formData)
     }
+    const handleLogin =()=>{
+        navigate('/teacher-login');
+    }
+
+    const handleStudentRedirect = () =>{
+        navigate('/')
+    }
 
     const handleSubmit= async (e)=>{
         e.preventDefault();
@@ -85,6 +92,10 @@ export function TRegister(props){
                     <Col lg={3}>
                         <Button variant="primary" type='submit' name="submit" value="Register">Register</Button>
                     </Col>
+
+                    <Col lg={3}>
+                        <Button variant="success" onClick={handleLogin} >Already have teacher Account? Login!</Button>
+                    </Col>
                 </Row>
 
             </Form>
@@ -92,6 +103,12 @@ export function TRegister(props){
                 <Col lg={4}>
                 {loginError?<Alert variant="danger" className="mt-3">UserName already registered</Alert>:null}
                     
+                </Col>
+            </Row>
+            <Row className="mt-4">
+                <Col lg={1}/>
+                <Col lg={3}>
+                    <Button variant="info" onClick={handleStudentRedirect} >Go to Student Page</Button>
                 </Col>
             </Row>
         </Container>
