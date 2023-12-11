@@ -1,30 +1,45 @@
 import { Col, Container, Row, Form, Button, Alert } from "react-bootstrap";
 import { useState } from "react";
 import { THeader } from "./THeader";
-import { saveTeachers } from "./fetchTeacher";
-import { loginTeacher } from "../../Services/Teacher/Teacher_APIs";
 
+import { loginTeacher } from "../../Services/Teacher/Teacher_APIs";
+import { useNavigate } from "react-router-dom";
 //import { useState } from "react";
+import { TeacherLoginSchema } from "../../ValidationSchema/TeacherLoginValidations";
 
 export function TLogin(props){
 
     const[formData ,setFormData] = useState({email:"",password:""});
+    const [afterloginError,setafterLoginError]=useState(false);
+    const navigate = useNavigate();
 
     const handleChange = (e)=>{
         setFormData({...formData, [e.target.name]: e.target.value});
         console.log(formData);
     }
+   
 
     const handleSubmit= async (e)=>{
-        e.preventDefault();
+       
        try{
             const result = await loginTeacher(formData);
             console.log("from login api ",result.data.message)
             //if result.data.message = invalid username or password then show alert 
             //if not coreect mesaage then navigate to studnet-dashboard
+            if(result.data.message === "Logged in Succesfully"){
+                localStorage.setItem('Teacher_ID' , result.data.Teacher_Id);
+                 localStorage.setItem('Ttoken' , result.data.token);
+                navigate('/teacher-dashboard');            
+           }else{
+            setafterLoginError(true);
+            alert("Wrong Username Or Password")
+            
+           }
 
        }catch(error){
         console.log(error)
+        setafterLoginError(true);
+        
        }
     }
     

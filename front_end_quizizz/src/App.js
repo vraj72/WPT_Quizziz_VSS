@@ -37,11 +37,11 @@ function App() {
 ////////////////////////////////////////////////////////////////////////////////////
 
       <Route path='/teacher-login' element={<TLogin/>}></Route>
-      <Route path='/teacher-register' element={<TRegister/>}></Route>
-      <Route path='/teacher-dashboard' element={<TDashBoard/>}></Route>
-      <Route path='/teacher-create-quiz/:Quizz_ID' element={<TCreatetQuiz/>}></Route>
-      <Route path='/teacher-see-quiz-results/:Quizz_ID' element={<TSeeQuizResult/>}></Route>
-      <Route path='/teacher-see-quizes/:Course_ID' element={<TSeeQuizes/>}></Route>
+      <Route path='/teacher-register' element={<TRedirectIfLoggedIn><TRegister/></TRedirectIfLoggedIn>}></Route>
+      <Route path='/teacher-dashboard' element={<TPrivateRoute><TDashBoard/></TPrivateRoute>}></Route>
+      <Route path='/teacher-create-quiz/:Quizz_ID' element={<TPrivateRoute><TCreatetQuiz/></TPrivateRoute>}></Route>
+      <Route path='/teacher-see-quiz-results/:Quizz_ID' element={<TPrivateRoute><TSeeQuizResult/></TPrivateRoute>}></Route>
+      <Route path='/teacher-see-quizes/:Course_ID' element={<TPrivateRoute><TSeeQuizes/></TPrivateRoute>}></Route>
   
     </Routes>
   </BrowserRouter>
@@ -49,3 +49,5 @@ function App() {
 }
 
 export default App;
+
+

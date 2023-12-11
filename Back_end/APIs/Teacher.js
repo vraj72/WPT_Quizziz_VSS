@@ -2,8 +2,26 @@ import { Router, request, response } from "express";
 import { StatusCodes } from "http-status-codes";
 import mysqlConnection from "../db_connection/mysql_db.js";
 import { Quizz } from "../Models/quizModel.js";
+import  jwt  from "jsonwebtoken";
 
 const router_teacher = Router();
+
+function verifyToken(request, response, next) {
+  const header = request.get('Authorization');
+  if (header) {
+      const token = header.split(" ")[1];
+      jwt.verify(token, "VSS65", (error, payload) => {
+          if (error) {
+              response.status(StatusCodes.UNAUTHORIZED).send({ message: "Invalid" })
+          }
+          else{
+              next();
+          }
+      });
+  } else {
+      response.status(StatusCodes.UNAUTHORIZED).send({ message: "Please Login again" })
+  }
+}
 
 /////////////////////////Welcome /////////////////////////
 router_teacher.get("/", (request, response) => {
@@ -50,7 +68,7 @@ router_teacher.post("/login", (request, response) => {
 
 
   mysqlConnection.query(
-    `SELECT pswrd FROM Teacher WHERE Email = "${email}"`,
+    `SELECT Teacher_ID ,pswrd FROM Teacher WHERE Email = "${email}"`,
     (error, results, feilds) => {
       //if query error
       if (error) {
@@ -72,10 +90,9 @@ router_teacher.post("/login", (request, response) => {
           //query returning values
           const pswrd = results[0].pswrd;
           if (password == pswrd) {
-            //password chcek
-            response
-              .status(StatusCodes.OK)
-              .send({ message: "Logged in Succesfully" });
+            const token = jwt.sign({ email }, "VSS65")
+            response.status(StatusCodes.OK).send({ message: "Logged in Succesfully", token: token,Teacher_ID : results[0].Teacher_ID});
+           
           } else {
             //if password does not check
             response
