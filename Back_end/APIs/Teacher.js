@@ -9,8 +9,8 @@ const router_teacher = Router();
 function verifyToken(request, response, next) {
   const header = request.get('Authorization');
   if (header) {
-      const token = header.split(" ")[1];
-      jwt.verify(token, "VSS65", (error, payload) => {
+      const token = header.split(" ")[0];
+      jwt.verify(token, "VSS65T", (error, payload) => {
           if (error) {
               response.status(StatusCodes.UNAUTHORIZED).send({ message: "Invalid" })
           }
@@ -90,7 +90,7 @@ router_teacher.post("/login", (request, response) => {
           //query returning values
           const pswrd = results[0].pswrd;
           if (password == pswrd) {
-            const token = jwt.sign({ email }, "VSS65")
+            const token = jwt.sign({ email }, "VSS65T")
             response.status(StatusCodes.OK).send({ message: "Logged in Succesfully", token: token,Teacher_ID : results[0].Teacher_ID});
            
           } else {
@@ -123,7 +123,7 @@ router_teacher.get("/list", (request, response) => {
 
 
 ///////////////////////////////////////CreateQuiz//////////////////////////////////
-router_teacher.post("/createQuizz", async (request, response) => {
+router_teacher.post("/createQuizz", verifyToken,async (request, response) => {
   const rb = request.body;
   //creating mongo object first
   try {
@@ -171,7 +171,7 @@ router_teacher.post("/createQuizz", async (request, response) => {
 
 
 /////////////////////////////EditQuizz///////////////////////////////////////
-router_teacher.post("/editQuizz", async (request, response) => {
+router_teacher.post("/editQuizz",verifyToken, async (request, response) => {
   const rb = request.body;
   const _ID = request.body._ID;
   const Quizz_ID = request.body.Quizz_ID;
@@ -202,7 +202,7 @@ router_teacher.post("/editQuizz", async (request, response) => {
 
 
 /////////////////////////////////GetQuizz///////////////////////////////
-router_teacher.get('/getQuizz', async(request, response)=>{
+router_teacher.get('/getQuizz',verifyToken, async(request, response)=>{
     const _ID = request.body._ID;
     const Quizz_ID = request.body.Quizz_ID;
     try{
@@ -229,7 +229,7 @@ router_teacher.get('/getQuizz', async(request, response)=>{
 
 
 //////////////////////////////////showMyQuizzListonCourse//////////////////////
-router_teacher.post("/showEnrollementOnCourse", (request, response) => {
+router_teacher.post("/showEnrollementOnCourse",verifyToken, (request, response) => {
 
   const Course_ID= request.body.Course_ID;
   mysqlConnection.query(`select * from Student,Enrollement where Student.Student_ID=Enrollement.Student_ID AND Course_ID = "${Course_ID}";`, (error, results, feilds) => {
@@ -248,7 +248,7 @@ router_teacher.post("/showEnrollementOnCourse", (request, response) => {
 
 
 //////////////////////////////////showMyQuizzListonCourse//////////////////////
-router_teacher.post("/showMyQuizzListonCourse", (request, response) => {
+router_teacher.post("/showMyQuizzListonCourse", verifyToken,(request, response) => {
 
   const Course_ID= request.body.Course_ID;
   mysqlConnection.query(`select * from Quizz where Course_ID = "${Course_ID}";`, (error, results, feilds) => {
@@ -269,7 +269,7 @@ router_teacher.post("/showMyQuizzListonCourse", (request, response) => {
 
 
 ////////////////////////////ShowAttempt On Quizz///////////////////////////
-router_teacher.post("/showAttemptsOnQuizz", (request, response) => {
+router_teacher.post("/showAttemptsOnQuizz",verifyToken, (request, response) => {
   const Quizz_ID= request.body.Quizz_ID;
   mysqlConnection.query(`select AID, QuizzAttempt.Student_ID , First_Name, Last_Name, Email, marks, status, attempt_mongo_ID 
   from Student, QuizzAttempt where Student.Student_ID=QuizzAttempt.Student_ID and Quizz_ID = "${Quizz_ID}";`, (error, results, feilds) => {
@@ -288,7 +288,7 @@ router_teacher.post("/showAttemptsOnQuizz", (request, response) => {
 
 
 //////////////////////////////listMycourse//////////////////////////
-router_teacher.post("/listMyCourses", (request, response) => {
+router_teacher.post("/listMyCourses",verifyToken, (request, response) => {
   const Teacher_ID= request.body.Teacher_ID;
   mysqlConnection.query(`SELECT * FROM course where Teacher_ID = "${Teacher_ID}";`, (error, results, feilds) => {
     if (error) {
@@ -306,7 +306,7 @@ router_teacher.post("/listMyCourses", (request, response) => {
 
 
 ////////////////////////CreateCourse///////////////////////////
-router_teacher.post('/createCourse',(request, response)=>{
+router_teacher.post('/createCourse',verifyToken,(request, response)=>{
   const Course_name = request.body.Course_name;
   const description = request.body.description;
   const Teacher_ID = request.body.Teacher_ID;
@@ -333,7 +333,7 @@ router_teacher.post('/createCourse',(request, response)=>{
 
 
 // create course API
-router_teacher.post(`/CreateCourse`,async(request,response)=>{
+router_teacher.post(`/CreateCourse`,verifyToken,async(request,response)=>{
     console.log(request.body);
     const Course_name = request.body.Course_name;
     const description = request.body.description;
@@ -358,7 +358,7 @@ router_teacher.post(`/CreateCourse`,async(request,response)=>{
 })
 
 // Show My courses API
-router_teacher.get(`/ShowCourses`,async(request,response)=>{
+router_teacher.get(`/ShowCourses`,verifyToken,async(request,response)=>{
     console.log(request.body)
     const Teacher_ID = request.body.Teacher_ID;
 
@@ -378,7 +378,7 @@ router_teacher.get(`/ShowCourses`,async(request,response)=>{
 });
 
 //show enrollment on courses
-router_teacher.get(`/ShowEnrolledCourses`, async(request,response)=>{
+router_teacher.get(`/ShowEnrolledCourses`,verifyToken, async(request,response)=>{
   console.log(request.body)
   const Teacher_ID = request.body.Teacher_ID
 
@@ -397,7 +397,7 @@ router_teacher.get(`/ShowEnrolledCourses`, async(request,response)=>{
 
 
 //SHOW MYQUIZ API
-router_teacher.get("/showMyQuizzList", async(request,response)=>{
+router_teacher.get("/showMyQuizzList",verifyToken, async(request,response)=>{
   console.log(request.body)
   const Course_ID = request.body.Course_ID;
 
@@ -415,7 +415,7 @@ router_teacher.get("/showMyQuizzList", async(request,response)=>{
 
 
 //showAttemptsOnQuiz
-router_teacher.get("/showAttemptsOnQuiz",async(request,response)=>{
+router_teacher.get("/showAttemptsOnQuiz",verifyToken,async(request,response)=>{
 const Quizz_ID = request.body.Quizz_ID
 
 mysqlConnection.query(`SELECT * FROM QuizzAttempt WHERE attempt_mongo_ID="${Quizz_ID}"`,(error,results,fields)=>{

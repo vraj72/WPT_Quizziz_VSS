@@ -6,7 +6,6 @@ import { createCourse, fetchMyCourses } from "../../Services/Teacher/Teacher_API
 import { useNavigate } from "react-router-dom";
 
 export function TDashBoard(props){
-    localStorage.setItem('Teacher_ID' , 1001);
     const[ myCourseList , setMyCourseList ]= useState([]);
     const[ newCourse, setNewCourse ] = useState({Course_name : null, description : null })
     const navigate = useNavigate();
@@ -60,7 +59,7 @@ export function TDashBoard(props){
                 <THeader text="Welcome to Quizizz Teacher DashBoard"></THeader>
                 <h4>My Courses</h4><hr></hr>
                 <Container>
-                <Row xs={1} md={4} className="g-4">
+                <Row xs={1} md={1} className="g-4">
                     {(myCourseList == "No Course Created")?
                     <THeader text={myCourseList}></THeader>:
                         myCourseList.map(( course) => (

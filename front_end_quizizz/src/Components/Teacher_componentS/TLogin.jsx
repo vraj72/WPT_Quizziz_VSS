@@ -20,14 +20,15 @@ export function TLogin(props){
    
 
     const handleSubmit= async (e)=>{
+        e.preventDefault();
        
        try{
-            const result = await loginTeacher(formData);
+                const result = await loginTeacher(formData);
             console.log("from login api ",result.data.message)
             //if result.data.message = invalid username or password then show alert 
             //if not coreect mesaage then navigate to studnet-dashboard
             if(result.data.message === "Logged in Succesfully"){
-                localStorage.setItem('Teacher_ID' , result.data.Teacher_Id);
+                localStorage.setItem('Teacher_ID' , result.data.Teacher_ID);
                  localStorage.setItem('Ttoken' , result.data.token);
                 navigate('/teacher-dashboard');            
            }else{

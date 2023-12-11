@@ -36,7 +36,7 @@ function App() {
  
 ////////////////////////////////////////////////////////////////////////////////////
 
-      <Route path='/teacher-login' element={<TLogin/>}></Route>
+      <Route path='/teacher-login' element={<TRedirectIfLoggedIn><TLogin/></TRedirectIfLoggedIn>}></Route>
       <Route path='/teacher-register' element={<TRedirectIfLoggedIn><TRegister/></TRedirectIfLoggedIn>}></Route>
       <Route path='/teacher-dashboard' element={<TPrivateRoute><TDashBoard/></TPrivateRoute>}></Route>
       <Route path='/teacher-create-quiz/:Quizz_ID' element={<TPrivateRoute><TCreatetQuiz/></TPrivateRoute>}></Route>

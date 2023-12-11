@@ -3,10 +3,10 @@ import { Navigate } from "react-router-dom";
 export function TPrivateRoute(props){
     if(isTeacherAuthenticated()){
         return(
-       <>{props.children}</>
+            <>{props.children}</>
         )
         }
        return(
-       <Navigate to="/"></Navigate>
+            <Navigate to="/teacher-login"></Navigate>
         );
 }

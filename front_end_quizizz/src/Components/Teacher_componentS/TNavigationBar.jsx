@@ -7,7 +7,7 @@ export function TNavigationBar(props){
   const navigate = useNavigate();
   const handleLogout = () =>{
               Teacherlogout();
-            navigate('/')}
+            navigate('/teacher-login')}
     return(
         <Navbar expand="lg" className="bg-body-tertiary">
         <Container>
@@ -20,13 +20,7 @@ export function TNavigationBar(props){
                     <Nav.Link >Teacher DashBoard</Nav.Link>
                 </LinkContainer>
 
-                <LinkContainer to="/teacher-login">
-                    <Nav.Link >Teacher Login</Nav.Link>
-                </LinkContainer>
-
-                <LinkContainer to="/teacher-register">
-                    <Nav.Link >Teacher Register</Nav.Link>
-                </LinkContainer>
+               
                 
             </Nav>
             <Button variant="danger" onClick={handleLogout}>Teacher LogOut</Button>
