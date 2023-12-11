@@ -67,7 +67,7 @@ export function SDashBoard(props){
                 <SHeader text="Welcome to Quizizz"></SHeader>
                 <h4>My Courses</h4><hr></hr>
                 <Container>
-                <Row xs={1} md={4} className="g-4 ">
+                <Row xs={1} md={2} className="g-4 ">
                     {(myCourseList.length === 0)?
                     <SHeader text="No Course Enrolled Yet"></SHeader>:
                         myCourseList.map(( course) => (

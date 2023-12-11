@@ -26,9 +26,9 @@ export function SLogin(props) {
                         try {
                             const res = "Logged in Succesfully";
                             const result = await loginStudent(values);
-                            console.log("from login api ", result.data.message,result.data.Student_Id)
+                            console.log("from login api in s LOGIN", result,result.data.message,result.data.Student_ID)
                             if (res == result.data.message) {
-                                localStorage.setItem('Student_ID' , result.data.Student_Id);
+                                localStorage.setItem('Student_ID' , result.data.Student_ID);
                                 localStorage.setItem('Stoken' , result.data.token);
                                 navigate("/student-dashboard");
                             }else{

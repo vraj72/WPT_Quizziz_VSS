@@ -9,7 +9,8 @@ import jwt from 'jsonwebtoken';
 function verifyToken(request, response, next) {
     const header = request.get('Authorization');
     if (header) {
-        const token = header.split(" ")[1];
+        const token = header.split(" ")[0];
+        console.log(token)
         jwt.verify(token, "VSS65", (error, payload) => {
             if (error) {
                 response.status(StatusCodes.UNAUTHORIZED).send({ message: "Invalid" })
@@ -19,7 +20,7 @@ function verifyToken(request, response, next) {
             }
         });
     } else {
-        response.status(StatusCodes.UNAUTHORIZED).send({ message: "Please Login again" })
+        response.status(StatusCodes.UNAUTHORIZED).send({ message: "Please Login again verifytoken" })
     }
 }
 
@@ -36,7 +37,7 @@ router_student.post('/login', (request, response) => {
     const email = request.body.email;
     const password = request.body.password;
 
-    mysqlConnection.query(`SELECT Student_Id,pswrd FROM student WHERE Email = "${email}"`, (error, results, fields) => {
+    mysqlConnection.query(`SELECT Student_Id,pswrd FROM Student WHERE Email = "${email}"`, (error, results, fields) => {
         //if query error
         if (error) {
             console.log(error);
@@ -51,6 +52,7 @@ router_student.post('/login', (request, response) => {
                 const pswrd = results[0].pswrd;
                 if (password == pswrd) { //password check
                     const token = jwt.sign({ email }, "VSS65")
+                    console.log(results, results[0].Student_Id)
                     response.status(StatusCodes.OK).send({ message: "Logged in Succesfully", token: token, Student_ID: results[0].Student_Id });
                 } else { //if password does not check 
                     response.status(StatusCodes.OK).send({ message: "Enter Correct password" });
@@ -62,11 +64,11 @@ router_student.post('/login', (request, response) => {
 
 
 //////////////////////////Registration////////////////////////////////////
-router_student.post('/register',verifyToken, (request, response) => {
+router_student.post('/register', (request, response) => {
     const { first_name, last_name, email, gender, mobile_no, pswrd } = request.body;
 
     mysqlConnection.query(
-        `INSERT INTO student (first_name, last_name, email, gender, mobile_no, pswrd) 
+        `INSERT INTO Student (first_name, last_name, email, gender, mobile_no, pswrd) 
         VALUES ('${first_name}', '${last_name}', '${email}', '${gender}', '${mobile_no}', '${pswrd}')`,
         (error, results, fields) => {
             if (error) {

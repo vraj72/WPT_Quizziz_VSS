@@ -26,7 +26,7 @@ export function SRegister() {
                             const result = await registerStudent(values);
                             console.log("from registration API",result.data.message)
                             if(res == result.data.message){
-                                navigate("/Student-login")
+                                navigate("/")
                             }else{
                                 setRegistrationError(true);
                             }
